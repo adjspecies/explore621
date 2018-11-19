@@ -4,6 +4,11 @@ from django.db import models
 class Tag(models.Model):
     tag = models.TextField(unique=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['tag']),
+        ]
+
 
 class Source(models.Model):
     url = models.URLField(unique=True)

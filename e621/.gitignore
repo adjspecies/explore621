@@ -1,0 +1,4 @@
+*.sw[op]
+__pycache__
+*.pyc
+prod_settings.py

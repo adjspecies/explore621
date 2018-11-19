@@ -36,6 +36,7 @@ class Command(BaseCommand):
                 self.stdout.write(
                     self.style.NOTICE('got {} on page {}, skipping'.format(
                         r.status_code, i)))
+                continue
             tags_added = {}
             sources_added = {}
             artists_added = {}
