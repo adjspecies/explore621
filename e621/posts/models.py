@@ -68,4 +68,6 @@ class Post(models.Model):
 class IngestLog(models.Model):
     ingest_date = models.DateTimeField(auto_now_add=True)
     records_ingested = models.IntegerField()
+    new = models.IntegerField()
+    updated = models.IntegerField()
     last_id = models.IntegerField()

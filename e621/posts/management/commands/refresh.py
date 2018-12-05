@@ -4,6 +4,7 @@ import requests
 import time
 
 from django.core.management.base import BaseCommand
+from django.db.models import Count
 from django.db.utils import IntegrityError
 
 from posts.models import (
@@ -22,6 +23,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         ingested = 0
+        total_new = 0
+        total_updated = 0
         last_id = 0
         tags_added = {}
         sources_added = {}
@@ -154,16 +157,22 @@ class Command(BaseCommand):
                 post.sources.set(sources)
                 post.tags.set(tags)
                 ingested += 1
+            total_new += new
+            total_updated += updated
             self.stdout.write(
                 self.style.SUCCESS(
-                    'processed page {}; {} new, {} updated'.format(
+                    '    processed page {}; {} new, {} updated'.format(
                         i, new, updated)))
         log = IngestLog(
             records_ingested=ingested,
+            new=total_new,
+            updated=total_updated,
             last_id=last_id)
         log.save()
         self.stdout.write(
-            self.style.SUCCESS('{} posts ingested'.format(ingested)))
+            self.style.SUCCESS('{} posts ingested ({} new - {} updated'.format(
+                ingested, total_new, total_updated)))
+        tags_fixed = 0
         for tag in Tag.objects.filter(tag_type=-1):
             r = requests.get(
                 'https://e621.net/tag/show.json',
@@ -171,11 +180,23 @@ class Command(BaseCommand):
                 headers={'user-agent': '[adjective][species]'})
             if 'type' not in r.json():
                 self.stdout.write(
-                    self.style.NOTICE('not fixing {}'.format(tag.tag)))
+                    self.style.NOTICE('    not fixing {}'.format(tag.tag)))
                 continue
             tag.tag_type = r.json()['type']
             tag.save()
+            tags_fixed += 1
             self.stdout.write(
-                self.style.SUCCESS('fixing {} ({})'.format(
+                self.style.SUCCESS('    fixing {} ({})'.format(
                     tag.tag, tag.tag_type)))
             time.sleep(0.7)
+        self.stdout.write(
+            self.style.SUCCESS('{} tags fixed'.format(tags_fixed)))
+        empty = Tag.objects.annotate(Count('post')).filter(post__count=0)
+        tags_deleted = 0
+        for tag in empty:
+            self.stdout.write(
+                self.style.NOTICE('    deleting {}'.format(tag.tag)))
+            tag.delete()
+            tags_deleted += 1
+        self.stdout.write(
+            self.style.SUCCESS('{} empty tags deleted'.format(tags_deleted)))
