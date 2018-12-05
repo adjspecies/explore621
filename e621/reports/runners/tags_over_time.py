@@ -1,11 +1,11 @@
 import json
 
 from posts.models import Post
-from reports.runners import (
+from reports.runners.reference import (
     FIRST_YEAR,
     TODAY,
-    BaseRunner,
 )
+from reports.runners.base import BaseRunner
 
 
 class Runner(BaseRunner):
