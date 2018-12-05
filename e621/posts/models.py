@@ -19,6 +19,11 @@ class Artist(models.Model):
 
 
 class Post(models.Model):
+    RATING_CHOICES = (
+        ('s', 'safe'),
+        ('q', 'questionable'),
+        ('e', 'explicit'),
+    )
     source_id = models.IntegerField(unique=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField()
@@ -40,7 +45,7 @@ class Post(models.Model):
     sample_url = models.URLField()
     sample_width = models.IntegerField()
     sample_height = models.IntegerField()
-    rating = models.CharField(max_length=5)
+    rating = models.CharField(max_length=5, choices=RATING_CHOICES)
     status = models.CharField(max_length=20)
     has_comments = models.BooleanField()
     has_notes = models.BooleanField()
