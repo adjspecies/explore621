@@ -2,7 +2,15 @@ from django.db import models
 
 
 class Tag(models.Model):
+    TYPE_CHOICES = (
+        (0, 'general'),
+        (1, 'artist'),
+        (3, 'copyright'),
+        (4, 'character'),
+        (5, 'species'),
+    )
     tag = models.TextField(unique=True)
+    tag_type = models.IntegerField(choices=TYPE_CHOICES, default=-1)
 
     class Meta:
         indexes = [

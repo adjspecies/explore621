@@ -27,7 +27,7 @@ class Command(BaseCommand):
         sources_added = {}
         artists_added = {}
         for i in range(1, 751):
-            time.sleep(2)
+            time.sleep(1)
             r = requests.get(
                 'https://e621.net/post/index.json',
                 {'page': i},
@@ -47,6 +47,34 @@ class Command(BaseCommand):
                     last_id = record['id']
                 try:
                     post = Post.objects.get(source_id=record['id'])
+                    post.source_id = record['id']
+                    post.description = record['description']
+                    post.created_at = created_at
+                    post.creator_id = record['creator_id']
+                    post.author = record['author']
+                    post.change = record['change']
+                    post.source = record['source']
+                    post.score = record['score']
+                    post.fav_count = record['fav_count']
+                    post.md5 = record['md5']
+                    post.file_size = record['file_size']
+                    post.file_url = record['file_url']
+                    post.width = record['width']
+                    post.height = record['height']
+                    post.file_ext = record['file_ext']
+                    post.preview_url = record['preview_url']
+                    post.preview_width = record['preview_width']
+                    post.preview_height = record['preview_height']
+                    post.sample_url = record['sample_url']
+                    post.sample_width = record['sample_width']
+                    post.sample_height = record['sample_height']
+                    post.rating = record['rating']
+                    post.status = record['status']
+                    post.has_comments = record['has_comments']
+                    post.has_notes = record['has_notes']
+                    post.has_children = record['has_children']
+                    post.children = record['children']
+                    post.parent_id = record['parent_id']
                     updated += 1
                 except Post.DoesNotExist:
                     created_at = pytz.utc.localize(
@@ -136,3 +164,18 @@ class Command(BaseCommand):
         log.save()
         self.stdout.write(
             self.style.SUCCESS('{} posts ingested'.format(ingested)))
+        for tag in Tag.objects.filter(tag_type=-1):
+            r = requests.get(
+                'https://e621.net/tag/show.json',
+                params={'name': tag.tag},
+                headers={'user-agent': '[adjective][species]'})
+            if 'type' not in r.json():
+                self.stdout.write(
+                    self.style.NOTICE('not fixing {}'.format(tag.tag)))
+                continue
+            tag.tag_type = r.json()['type']
+            tag.save()
+            self.stdout.write(
+                self.style.SUCCESS('fixing {} ({})'.format(
+                    tag.tag, tag.tag_type)))
+            time.sleep(0.7)
