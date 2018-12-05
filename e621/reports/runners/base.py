@@ -11,7 +11,7 @@ class BaseRunner(object):
         self.model.save()
         if len(self.report.attributes):
             attributes = loads(self.report.attributes)
-            for key, value in attributes:
+            for key, value in attributes.items():
                 self.__dict__[key] = value
 
     def add_datum(self, variable, key, value):

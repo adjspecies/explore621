@@ -21,7 +21,7 @@ class Runner(BaseRunner):
                     .filter(tags__tag=tag)\
                     .count()
         for tag, years in self.result.items():
-            for year, value in years:
+            for year, value in years.items():
                 self.add_datum(tag, year, value)
 
     def generate_result(self):
