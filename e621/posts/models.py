@@ -71,3 +71,5 @@ class IngestLog(models.Model):
     new = models.IntegerField()
     updated = models.IntegerField()
     last_id = models.IntegerField()
+    fixed_tags = models.TextField(blank=True)
+    deleted_tags = models.TextField(blank=True)

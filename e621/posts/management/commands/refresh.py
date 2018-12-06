@@ -163,16 +163,11 @@ class Command(BaseCommand):
                 self.style.SUCCESS(
                     '    processed page {}; {} new, {} updated'.format(
                         i, new, updated)))
-        log = IngestLog(
-            records_ingested=ingested,
-            new=total_new,
-            updated=total_updated,
-            last_id=last_id)
-        log.save()
         self.stdout.write(
-            self.style.SUCCESS('{} posts ingested ({} new - {} updated'.format(
+            self.style.SUCCESS('{} posts ingested ({} new - {} updated)'.format(
                 ingested, total_new, total_updated)))
         tags_fixed = 0
+        fixed_tags = []
         for tag in Tag.objects.filter(tag_type=-1):
             r = requests.get(
                 'https://e621.net/tag/show.json',
@@ -185,6 +180,7 @@ class Command(BaseCommand):
             tag.tag_type = r.json()['type']
             tag.save()
             tags_fixed += 1
+            fixed_tags.append(tag.tag)
             self.stdout.write(
                 self.style.SUCCESS('    fixing {} ({})'.format(
                     tag.tag, tag.tag_type)))
@@ -193,10 +189,20 @@ class Command(BaseCommand):
             self.style.SUCCESS('{} tags fixed'.format(tags_fixed)))
         empty = Tag.objects.annotate(Count('post')).filter(post__count=0)
         tags_deleted = 0
+        deleted_tags = []
         for tag in empty:
             self.stdout.write(
                 self.style.NOTICE('    deleting {}'.format(tag.tag)))
+            deleted_tags.append(tag.tag)
             tag.delete()
             tags_deleted += 1
         self.stdout.write(
             self.style.SUCCESS('{} empty tags deleted'.format(tags_deleted)))
+        log = IngestLog(
+            records_ingested=ingested,
+            new=total_new,
+            updated=total_updated,
+            last_id=last_id,
+            fixed_tags=' '.join(fixed_tags),
+            deleted_tags=' '.join(deleted_tags))
+        log.save()
