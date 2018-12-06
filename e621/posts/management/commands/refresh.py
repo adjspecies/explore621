@@ -21,6 +21,13 @@ class Command(BaseCommand):
     help = ("Adds any new posts and refreshes tags on old posts up "
             "to a certain point")
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--pages',
+            nargs='?',
+            type=int,
+            default=750)
+
     def handle(self, *args, **options):
         ingested = 0
         total_new = 0
@@ -29,15 +36,21 @@ class Command(BaseCommand):
         tags_added = {}
         sources_added = {}
         artists_added = {}
-        for i in range(1, 751):
+        start = datetime.now()
+        self.stdout.write('Refreshing data from e621 starting at {}'.format(
+            start.isoformat()))
+        self.stdout.write('Fetching {} pages worth of posts'.format(
+            options['pages']))
+        for i in range(1, options['pages'] + 1):
             time.sleep(1)
+            self.stdout.write('--- Fetching page {}'.format(i))
             r = requests.get(
                 'https://e621.net/post/index.json',
                 {'page': i},
                 headers={'user-agent': '[adjective][species]'})
             if r.status_code != 200:
                 self.stdout.write(
-                    self.style.NOTICE('got {} on page {}, skipping'.format(
+                    self.style.NOTICE('    got {} on page {}, skipping'.format(
                         r.status_code, i)))
                 continue
             tags_added = {}
@@ -168,7 +181,9 @@ class Command(BaseCommand):
                 ingested, total_new, total_updated)))
         tags_fixed = 0
         fixed_tags = []
+        self.stdout.write('Fixing typeless tags')
         for tag in Tag.objects.filter(tag_type=-1):
+            self.stdout.write('--- Fixing tag {}'.format(tag.tag))
             r = requests.get(
                 'https://e621.net/tag/show.json',
                 params={'name': tag.tag},
@@ -182,17 +197,18 @@ class Command(BaseCommand):
             tags_fixed += 1
             fixed_tags.append(tag.tag)
             self.stdout.write(
-                self.style.SUCCESS('    fixing {} ({})'.format(
-                    tag.tag, tag.tag_type)))
+                self.style.SUCCESS('    fixed {} ({})'.format(
+                    tag.tag, tag.get_tag_type_display())))
             time.sleep(0.7)
         self.stdout.write(
             self.style.SUCCESS('{} tags fixed'.format(tags_fixed)))
         empty = Tag.objects.annotate(Count('post')).filter(post__count=0)
         tags_deleted = 0
         deleted_tags = []
+        self.stdout.write('Deleting empty tags')
         for tag in empty:
             self.stdout.write(
-                self.style.NOTICE('    deleting {}'.format(tag.tag)))
+                self.style.NOTICE('--- deleting {}'.format(tag.tag)))
             deleted_tags.append(tag.tag)
             tag.delete()
             tags_deleted += 1
@@ -206,3 +222,6 @@ class Command(BaseCommand):
             fixed_tags=' '.join(fixed_tags),
             deleted_tags=' '.join(deleted_tags))
         log.save()
+        self.stdout.write(
+            self.style.SUCCESS('Finished refreshing in {}'.format(
+                str(datetime.now() - start))))

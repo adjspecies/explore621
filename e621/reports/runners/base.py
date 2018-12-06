@@ -29,6 +29,7 @@ class BaseRunner(object):
         self.run()
         self.generate_result()
         self.model.save()  # Update finished time.
+        return self.model
 
     def generate_result(self):
         pass

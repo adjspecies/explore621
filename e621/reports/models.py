@@ -20,8 +20,7 @@ class Report(models.Model):
 
     def run(self):
         runner = RUNNERS[self.runner](self)
-        runner.run_report()
-        return runner
+        return runner.run_report()
 
 
 class Run(models.Model):
