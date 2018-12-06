@@ -4,6 +4,7 @@ from pytz import UTC
 
 FIRST = datetime.datetime(2007, 2, 10, 7, 17, 30, tzinfo=UTC)
 NOW = datetime.datetime.utcnow()
+NOW = NOW.replace(tzinfo=UTC)
 
 def too_early(year=None, month=None, day=None, hour=None, minute=None,
                second=None):

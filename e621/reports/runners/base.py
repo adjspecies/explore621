@@ -15,20 +15,26 @@ class BaseRunner(object):
                 self.__dict__[key] = value
 
     def add_datum(self, variable, key, value):
-        datum = models.Datum(
-            run=self.model,
-            variable=variable,
-            key=key,
-            value=value)
-        datum.save()
+        if self.report.requires_datum_models:
+            datum = models.Datum(
+                run=self.model,
+                variable=variable,
+                key=key,
+                value=value)
+            datum.save()
 
     def set_result(self, result):
         self.model.result = result
 
     def run_report(self):
-        self.run()
-        self.generate_result()
-        self.model.save()  # Update finished time.
+        try:
+            self.run()
+            self.generate_result()
+            self.model.save()  # Update finished time.
+        except:
+            self.model.delete()
+            raise
+        self.report.clear_runs()
         return self.model
 
     def generate_result(self):
