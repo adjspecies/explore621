@@ -12,7 +12,32 @@ from reports.runners.utils import (
 from reports.runners.base import BaseRunner
 
 
-class PostsOverDay(BaseRunner):
+class TotalPostsOverDay(BaseRunner):
+
+    def run(self):
+        self.result = {}
+        total = 0
+        curr = FIRST.date()
+        while curr <= NOW.date():
+            date = curr.strftime('%Y-%m-%d')
+            self.result[date] = 0
+            curr += datetime.timedelta(days=1)
+        result_set = Post.objects\
+            .values('created_at__date')\
+            .annotate(count=Count('created_at__date'))
+        for result in result_set:
+            total += result['count']
+            self.result[result['created_at__date'].strftime('%Y-%m-%d')] =\
+                total
+        for date, count in self.result.items():
+            self.add_datum('day', date, count)
+
+    def generate_result(self):
+        self.set_result(json.dumps(
+            dict_to_key_value_list(self.result)))
+
+
+class UploadsOverDay(BaseRunner):
 
     def run(self):
         self.result = {}
@@ -35,7 +60,7 @@ class PostsOverDay(BaseRunner):
             dict_to_key_value_list(self.result)))
 
 
-class PostsOverHourPastWeek(BaseRunner):
+class UploadsOverHourPastWeek(BaseRunner):
 
     def run(self):
         self.result = {}
@@ -70,7 +95,7 @@ class PostsOverHourPastWeek(BaseRunner):
             dict_to_key_value_list(self.result)))
 
 
-class Top100TagsPastWeek(BaseRunner):
+class Top10TagsPastWeek(BaseRunner):
 
     def run(self):
         self.result = []
@@ -82,7 +107,7 @@ class Top100TagsPastWeek(BaseRunner):
                 .filter(created_at__lt=day + datetime.timedelta(days=1))\
                 .values('tags__tag')\
                 .annotate(count=Count('tags__tag'))\
-                .order_by('-count')[:100]
+                .order_by('-count')[:10]
             for result in result_set:
                 this_result.append({
                     'key': result['tags__tag'],
@@ -94,4 +119,16 @@ class Top100TagsPastWeek(BaseRunner):
             })
 
     def generate_result(self):
-        self.set_result(json.dumps(self.result))
+        result = {}
+        for curr in self.result:
+            date = curr['key']
+            total = float(sum([x['value'] for x in curr['value']], 0))
+            for entry in curr['value']:
+                if entry['key'] not in result:
+                    result[entry['key']] = []
+                result[entry['key']].append({
+                    'key': date,
+                    'value': float(entry['value']) / total,
+                })
+        self.set_result(json.dumps(
+            dict_to_key_value_list(result)))

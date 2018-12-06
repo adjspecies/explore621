@@ -9,8 +9,9 @@ RUNNERS = {
     'TagsOverMonth': tags_over_time.TagsOverMonth,
     'TagsOverDay': tags_over_time.TagsOverDay,
 
-    'PostsOverDay': dashboard.PostsOverDay,
-    'PostsOverHourPastWeek': dashboard.PostsOverHourPastWeek,
-    'Top100TagsPastWeek': dashboard.Top100TagsPastWeek,
+    'TotalPostsOverDay': dashboard.TotalPostsOverDay,
+    'UploadsOverDay': dashboard.UploadsOverDay,
+    'UploadsOverHourPastWeek': dashboard.UploadsOverHourPastWeek,
+    'Top10TagsPastWeek': dashboard.Top10TagsPastWeek,
 }
 
