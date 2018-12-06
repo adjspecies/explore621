@@ -4,9 +4,10 @@ import json
 from django.db.models import Count
 
 from posts.models import Post
-from reports.runners.reference import (
+from reports.runners.utils import (
     FIRST,
     NOW,
+    dict_to_key_value_list,
     too_early
 )
 from reports.runners.base import BaseRunner
@@ -39,7 +40,11 @@ class TagsOverYear(TagsOverTimeRunner):
                 self.add_datum(tag, year, value)
 
     def generate_result(self):
-        self.set_result(json.dumps(self.result))
+        result = self.result
+        for tag, years in result.items():
+            result[tag] = dict_to_key_value_list(years)
+        result = dict_to_key_value_list(result)
+        self.set_result(json.dumps(result))
 
 
 class TagsOverMonth(TagsOverTimeRunner):
@@ -67,7 +72,11 @@ class TagsOverMonth(TagsOverTimeRunner):
                 self.add_datum(tag, date, value)
 
     def generate_result(self):
-        self.set_result(json.dumps(self.result))
+        result = self.result
+        for tag, dates in result.items():
+            result[tag] = dict_to_key_value_list(dates)
+        result = dict_to_key_value_list(result)
+        self.set_result(json.dumps(result))
 
 
 class TagsOverDay(TagsOverTimeRunner):
@@ -95,7 +104,11 @@ class TagsOverDay(TagsOverTimeRunner):
                 self.add_datum(tag, date, value)
 
     def generate_result(self):
-        self.set_result(json.dumps(self.result))
+        result = self.result
+        for tag, dates in result.items():
+            result[tag] = dict_to_key_value_list(dates)
+        result = dict_to_key_value_list(result)
+        self.set_result(json.dumps(result))
 
 
 

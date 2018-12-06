@@ -11,5 +11,6 @@ RUNNERS = {
 
     'PostsOverDay': dashboard.PostsOverDay,
     'PostsOverHourPastWeek': dashboard.PostsOverHourPastWeek,
+    'Top100TagsPastWeek': dashboard.Top100TagsPastWeek,
 }
 

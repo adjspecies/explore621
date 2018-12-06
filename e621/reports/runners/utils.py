@@ -18,3 +18,7 @@ def too_early(year=None, month=None, day=None, hour=None, minute=None,
         tzinfo=UTC)
     return to_check < FIRST
 
+def dict_to_key_value_list(d):
+    return [
+        {'key': k1, 'value': v1} for k1, v1 in sorted(
+            [(k2, v2) for k2, v2 in d.items()])]

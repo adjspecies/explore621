@@ -61,6 +61,8 @@ class Command(BaseCommand):
             for record in r.json():
                 if record['id'] > last_id:
                     last_id = record['id']
+                created_at = pytz.utc.localize(
+                    datetime.fromtimestamp(record['created_at']['s']))
                 try:
                     post = Post.objects.get(source_id=record['id'])
                     post.source_id = record['id']
@@ -93,8 +95,6 @@ class Command(BaseCommand):
                     post.parent_id = record['parent_id']
                     updated += 1
                 except Post.DoesNotExist:
-                    created_at = pytz.utc.localize(
-                        datetime.fromtimestamp(record['created_at']['s']))
                     post = Post(
                         source_id=record['id'],
                         description=record['description'],

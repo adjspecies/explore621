@@ -4,9 +4,10 @@ import json
 from django.db.models import Count
 
 from posts.models import Post
-from reports.runners.reference import (
+from reports.runners.utils import (
     FIRST,
     NOW,
+    dict_to_key_value_list,
 )
 from reports.runners.base import BaseRunner
 
@@ -30,7 +31,8 @@ class PostsOverDay(BaseRunner):
             self.add_datum('day', date, count)
 
     def generate_result(self):
-        self.set_result(json.dumps(self.result))
+        self.set_result(json.dumps(
+            dict_to_key_value_list(self.result)))
 
 
 class PostsOverHourPastWeek(BaseRunner):
@@ -62,6 +64,34 @@ class PostsOverHourPastWeek(BaseRunner):
             self.result[date] = result['count']
         for hour, count in self.result.items():
             self.add_datum('hour', hour, count)
+
+    def generate_result(self):
+        self.set_result(json.dumps(
+            dict_to_key_value_list(self.result)))
+
+
+class Top100TagsPastWeek(BaseRunner):
+
+    def run(self):
+        self.result = []
+        for i in range(7, 0, -1):
+            day = NOW - datetime.timedelta(days=i)
+            this_result = []
+            result_set = Post.objects\
+                .filter(created_at__gt=day)\
+                .filter(created_at__lt=day + datetime.timedelta(days=1))\
+                .values('tags__tag')\
+                .annotate(count=Count('tags__tag'))\
+                .order_by('-count')[:100]
+            for result in result_set:
+                this_result.append({
+                    'key': result['tags__tag'],
+                    'value': result['count'],
+                })
+            self.result.append({
+                'key': day.strftime('%Y-%m-%d'),
+                'value': this_result,
+            })
 
     def generate_result(self):
         self.set_result(json.dumps(self.result))
