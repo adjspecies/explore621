@@ -20,10 +20,14 @@ class Command(BaseCommand):
             start.isoformat()))
         for report in Report.objects.filter(frequency=options['frequency']):
             self.stdout.write('--- Running {}'.format(report.title))
-            run = report.run()
-            self.stdout.write(
-                self.style.SUCCESS('    Report run in {}'.format(
-                    str(run.finished - run.started))))
+            try:
+                run = report.run()
+                self.stdout.write(
+                    self.style.SUCCESS('    Report run in {}'.format(
+                        str(run.finished - run.started))))
+            except Exception as e:
+                self.stdout.write(
+                    self.style.ERROR('    Error running report: {}'.format(e)))
         self.stdout.write(
             self.style.SUCCESS('All {} reports run in {}'.format(
                 options['frequency'],

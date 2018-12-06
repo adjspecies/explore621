@@ -10,17 +10,32 @@ from reports.runners.utils import (
     dict_to_key_value_list,
     too_early
 )
-from reports.runners.base import BaseRunner
+from reports.runners.base import (
+    BaseRunner,
+    InvalidAttribute,
+)
 
 
 class TagsOverTimeRunner(BaseRunner):
 
     def __init__(self, report):
         super().__init__(report)
-        self.__dict__['omit_empty'] = self.__dict__.get('omit_empty', False)
+        self.ensure_attribute('tags')
+        if len(self.tags) > 25:
+            raise InvalidAttribute('Cannot use more than 25 tags', self.tags)
+        self.default_attribute('omit_empty', False)
 
 
 class TagsOverYear(TagsOverTimeRunner):
+
+    help_text = """Count of given tags per year.
+
+    This runner gets the count of each of the specified tags per year.
+
+    Attributes:
+
+    * `tags` - an array of tags to search for.
+    """
 
     def run(self):
         self.result = {}
@@ -48,6 +63,15 @@ class TagsOverYear(TagsOverTimeRunner):
 
 
 class TagsOverMonth(TagsOverTimeRunner):
+
+    help_text = """Count of given tags per month.
+
+    This runner gets the count of each of the specified tags per month.
+
+    Attributes:
+
+    * `tags` - an array of tags to search for.
+    """
 
     def run(self):
         self.result = {}
@@ -80,6 +104,15 @@ class TagsOverMonth(TagsOverTimeRunner):
 
 
 class TagsOverDay(TagsOverTimeRunner):
+
+    help_text = """Count of given tags per day.
+
+    This runner gets the count of each of the specified tags per day.
+
+    Attributes:
+
+    * `tags` - an array of tags to search for.
+    """
 
     def run(self):
         self.result = {}
