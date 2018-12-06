@@ -21,6 +21,7 @@ class Report(models.Model):
     def run(self):
         runner = RUNNERS[self.runner](self)
         runner.run_report()
+        return runner
 
 
 class Run(models.Model):
