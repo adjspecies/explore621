@@ -13,4 +13,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         report = Report.objects.get(pk=options['report_id'])
-        report.run()
+        run = report.run()
+        self.stdout.write(run.result)

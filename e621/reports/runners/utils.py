@@ -22,3 +22,10 @@ def dict_to_key_value_list(d):
     return [
         {'key': k1, 'value': v1} for k1, v1 in sorted(
             [(k2, v2) for k2, v2 in d.items()])]
+
+def date_range(days, offset):
+    start = NOW\
+        - datetime.timedelta(days=days)\
+        - datetime.timedelta(days=offset)
+    end = start + datetime.timedelta(days=days)
+    return start, end

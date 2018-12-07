@@ -19,9 +19,13 @@ from django.urls import (
     path,
 )
 
-from posts.urls import apiurls
+from posts.urls import posts_api
+from reports.urls import (
+    reports_api,
+    reports_views,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(apiurls)),
-]
+    path('api/', include(posts_api + reports_api)),
+] + reports_views

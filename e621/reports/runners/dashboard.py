@@ -3,11 +3,15 @@ import json
 
 from django.db.models import Count
 
-from posts.models import Post
+from posts.models import (
+    Post,
+    Tag,
+)
 from reports.runners.utils import (
     FIRST,
     NOW,
     dict_to_key_value_list,
+    date_range,
 )
 from reports.runners.base import (
     BaseRunner,
@@ -192,3 +196,48 @@ class TopXTagsPastYDays(BaseRunner):
                 })
         self.set_result(json.dumps(
             dict_to_key_value_list(result)))
+
+
+
+class TopXTagsPastYDaysByType(BaseRunner):
+
+    def __init__(self, report):
+        super().__init__(report)
+        self.ensure_attribute('count')
+        self.ensure_attribute('days')
+        self.ensure_attribute('tag_type')
+        if self.count > 100:
+            raise InvalidAttribute(
+                'Cannot request more than 100 tags', self.count)
+        if self.days > 100:
+            raise InvalidAttribute(
+                'Cannot request day for more than 100 days', self.days)
+        valid_choices = [choice[1] for choice in Tag.TYPE_CHOICES]
+        if self.tag_type not in valid_choices:
+            raise InvalidAttribute(
+                'Tag type must be one of {}'.format(valid_choices),
+                self.tag_type)
+        self.tag_type_id = list(filter(
+            lambda x: x[1] == self.tag_type, Tag.TYPE_CHOICES))[0][0]
+        self.default_attribute('count_offset', 0)
+        self.default_attribute('days_offset', 0)
+
+    def run(self):
+        self.result = []
+        start, end = date_range(self.days, self.days_offset)
+        result_set = Post.objects\
+            .filter(created_at__gt=start)\
+            .filter(created_at__lt=end)\
+            .filter(tags__tag_type=self.tag_type_id)\
+            .values('tags__tag')\
+            .annotate(count=Count('tags__tag'))\
+            .order_by('-count')[
+                self.count_offset:self.count_offset + self.count]
+        for result in result_set:
+            self.result.append({
+                'key': result['tags__tag'],
+                'value': result['count'],
+            })
+
+    def generate_result(self):
+        self.set_result(json.dumps(self.result))
