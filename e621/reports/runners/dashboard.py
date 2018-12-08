@@ -201,6 +201,24 @@ class TopXTagsPastYDays(BaseRunner):
 
 class TopXTagsPastYDaysByType(BaseRunner):
 
+    help_text = """Dashboard Runner: Top X tags over last Y days.
+
+    This runner collects the top however many tags of a given type requested
+    used per day in the last requested number of days and calculates the
+    percent they were used.
+
+    Attributes:
+    
+    * `tag_type` - the type of tag. Can be 'general', 'artist', 'copyright',
+        'species', or 'character'
+    * `count` - the number of tags per day to request.
+    * `count_offset` - the number of tags to skip before starting to collect
+        (default: 0)
+    * `days` - the number of days worth of data to request.
+    * `days_offset` - the number of days to skip before starting to collect
+        (default: 0)
+    """
+
     def __init__(self, report):
         super().__init__(report)
         self.ensure_attribute('count')
