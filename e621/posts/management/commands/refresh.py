@@ -29,6 +29,8 @@ class Command(BaseCommand):
             default=750)
 
     def handle(self, *args, **options):
+        started = datetime.now()
+        started.replace(tzinfo=pytz.UTC)
         ingested = 0
         total_new = 0
         total_updated = 0
@@ -36,9 +38,8 @@ class Command(BaseCommand):
         tags_added = {}
         sources_added = {}
         artists_added = {}
-        start = datetime.now()
         self.stdout.write('Refreshing data from e621 starting at {}'.format(
-            start.isoformat()))
+            started.isoformat()))
         self.stdout.write('Fetching {} pages worth of posts'.format(
             options['pages']))
         for i in range(1, options['pages'] + 1):
@@ -215,6 +216,7 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS('{} empty tags deleted'.format(tags_deleted)))
         log = IngestLog(
+            started=started,
             records_ingested=ingested,
             new=total_new,
             updated=total_updated,
@@ -224,4 +226,4 @@ class Command(BaseCommand):
         log.save()
         self.stdout.write(
             self.style.SUCCESS('Finished refreshing in {}'.format(
-                str(datetime.now() - start))))
+                str(datetime.now() - started))))

@@ -6,7 +6,7 @@ from django.db.models import Count
 from posts.models import Post
 from reports.runners.utils import (
     FIRST,
-    NOW,
+    LATEST,
     dict_to_key_value_list,
     too_early
 )
@@ -40,7 +40,7 @@ class TagsOverYear(TagsOverTimeRunner):
     def run(self):
         self.result = {}
         for tag in (self.tags):
-            for year in range(FIRST.year, NOW.year + 1):
+            for year in range(FIRST.year, LATEST.year + 1):
                 if tag not in self.result:
                     self.result[tag] = {}
                 result = Post.objects\
@@ -76,7 +76,7 @@ class TagsOverMonth(TagsOverTimeRunner):
     def run(self):
         self.result = {}
         for tag in (self.tags):
-            for year in range(FIRST.year, NOW.year + 1):
+            for year in range(FIRST.year, LATEST.year + 1):
                 for month in range(1, 13):
                     if too_early(year=year, month=month):
                         continue
@@ -125,7 +125,7 @@ class TagsOverDay(TagsOverTimeRunner):
                 .annotate(count=Count('created_at__date'))
             if not self.omit_empty:
                 curr = FIRST.date()
-                while curr <= NOW.date():
+                while curr <= LATEST.date():
                     date = curr.strftime('%Y-%m-%d')
                     self.result[tag][date] = 0
                     curr += datetime.timedelta(days=1)

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="vis single">
+    <svg width="800" height="600" class="{{ report.runner }}"></svg>
+</div>
+<dl class="report">
+    <dt>Description</dt>
+    <dd>{{ report.description }}</dd>
+    {% if report.attributes %}
+    <dt>Attributes</dt>
+    <dd><code>{{ report.attributes }}</code></dd>
+    {% endif %}
+    <dt>Frequency</dt>
+    <dd>{{ report.get_frequency_display }}</dd>
+    <dt>Runs (max stored runs: {{ report.max_stored_runs }})<dt>
+    <dd><ul class="runs">
+        {% for current in report.run_set.all reversed %}
+        {% if current == run %}
+        <li class="current">#{{ current.id }} - run on {{ current.finished|date:'Y-m-d' }} in {{ current.duration }}</li>
+        {% else %}
+        <li><a href="{{ current.get_absolute_url }}">#{{ current.id }} - run on {{ current.finished|date:'Y-m-d' }} in {{ current.duration }}</a></li>
+        {% endif %}
+        {% endfor %}
+    </ul></dd>
+</dl>
+<div id="vis"></div>
+<script type="text/javascript" src="{% static 'js/runners/' %}{{ report.runner }}.js"></script>
+<script type="text/javascript">
+    {{ report.runner }}({{ run.result|safe }});
+</script>
+{% endblock %}

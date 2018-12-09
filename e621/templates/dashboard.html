@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard">
+    <div id="dashboard"></div>
+</section>
+<section class="injest-log">
+    <h3>Ingest log</h3>
+    <ul>
+        {% for item in ingests %}
+        <li>
+            Ingest on <strong>{{ item.finished|date:"Y-m-d" }}</strong> 
+            took <strong>{{ item.duration }}</strong> to run,
+            processing <strong>{{ item.records_ingested }} posts</strong>
+            ({{ item.new }} new, {{ item.updated }} updated),
+            fixing <strong><abbr title="{{ item.fixed_tags }}">{{ item.fixed_tags_count }} uncategorized tags</abbr></strong>,
+            and deleting <strong><abbr title="{{ item.deleted_tags }}">{{ item.deleted_tags_count }} abandoned tags</abbr></strong>.
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

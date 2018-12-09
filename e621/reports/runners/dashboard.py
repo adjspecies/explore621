@@ -9,7 +9,7 @@ from posts.models import (
 )
 from reports.runners.utils import (
     FIRST,
-    NOW,
+    LATEST,
     dict_to_key_value_list,
     date_range,
 )
@@ -34,7 +34,7 @@ class TotalPostsOverDay(BaseRunner):
         self.result = {}
         total = 0
         curr = FIRST.date()
-        while curr <= NOW.date():
+        while curr <= LATEST.date():
             date = curr.strftime('%Y-%m-%d')
             self.result[date] = 0
             curr += datetime.timedelta(days=1)
@@ -67,7 +67,7 @@ class UploadsOverDay(BaseRunner):
     def run(self):
         self.result = {}
         curr = FIRST.date()
-        while curr <= NOW.date():
+        while curr <= LATEST.date():
             date = curr.strftime('%Y-%m-%d')
             self.result[date] = 0
             curr += datetime.timedelta(days=1)
@@ -98,14 +98,14 @@ class UploadsOverHourPastWeek(BaseRunner):
 
     def run(self):
         self.result = {}
-        curr = NOW - datetime.timedelta(weeks=1)
-        while curr < NOW:
+        curr = LATEST - datetime.timedelta(weeks=1)
+        while curr < LATEST:
             date = curr.strftime('%Y-%m-%d %H')
             self.result[date] = 0
             curr += datetime.timedelta(hours=1)
         result_set = Post.objects\
             .filter(
-                created_at__gt=NOW - datetime.timedelta(weeks=1))\
+                created_at__gt=LATEST - datetime.timedelta(weeks=1))\
             .values(
                 'created_at__year',
                 'created_at__month',
@@ -163,8 +163,7 @@ class TopXTagsPastYDays(BaseRunner):
     def run(self):
         self.result = []
         for i in range(self.days + self.days_offset, self.days_offset, -1):
-            day = NOW - datetime.timedelta(days=i)
-            this_result = []
+            day = LATEST - datetime.timedelta(days=i)
             result_set = Post.objects\
                 .filter(created_at__gt=day)\
                 .filter(created_at__lt=day + datetime.timedelta(days=1))\
@@ -172,30 +171,15 @@ class TopXTagsPastYDays(BaseRunner):
                 .annotate(count=Count('tags__tag'))\
                 .order_by('-count')[
                     self.count_offset:self.count + self.count_offset]
-            for result in result_set:
-                this_result.append({
-                    'key': result['tags__tag'],
-                    'value': result['count'],
-                })
-            self.result.append({
+            this_result = {
                 'key': day.strftime('%Y-%m-%d'),
-                'value': this_result,
-            })
+            }
+            for result in result_set:
+                this_result[result['tags__tag']] = result['count']
+            self.result.append(this_result)
 
     def generate_result(self):
-        result = {}
-        for curr in self.result:
-            date = curr['key']
-            total = float(sum([x['value'] for x in curr['value']], 0))
-            for entry in curr['value']:
-                if entry['key'] not in result:
-                    result[entry['key']] = []
-                result[entry['key']].append({
-                    'key': date,
-                    'value': float(entry['value']) / total,
-                })
-        self.set_result(json.dumps(
-            dict_to_key_value_list(result)))
+        self.set_result(json.dumps(self.result))
 
 
 

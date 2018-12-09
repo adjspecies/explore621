@@ -66,10 +66,23 @@ class Post(models.Model):
 
 
 class IngestLog(models.Model):
-    ingest_date = models.DateTimeField(auto_now_add=True)
+    started = models.DateTimeField(blank=True, null=True)
+    finished = models.DateTimeField(auto_now_add=True)
     records_ingested = models.IntegerField()
     new = models.IntegerField()
     updated = models.IntegerField()
     last_id = models.IntegerField()
     fixed_tags = models.TextField(blank=True)
     deleted_tags = models.TextField(blank=True)
+
+    def fixed_tags_count(self):
+        return len(self.fixed_tags.split(' '))
+
+    def deleted_tags_count(self):
+        return len(self.deleted_tags.split(' '))
+
+    def duration(self):
+        if self.started:
+            return self.finished - self.started
+        else:
+            return "[no duration data]"

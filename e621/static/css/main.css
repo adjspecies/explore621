@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-family: "Nanum Gothic", sans-serif;
+    background-color: rgb(3, 17, 49);
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEoAAAAsCAYAAADCfS42AAADsElEQVRogdWa324SQRTGp62VP4VCa22rsYpaW20lMb6BMfo+vEFfg1fobR+Au171hgsSkw0hpkljJOwWdoHdevHzYoSsugvo/pnhJHO75+OcmTPffB9CxBwgVqBbrNVqOSEq2bTX5eVlDr5txP27Yg9o3TdNs6SiSJNlWVYZGvdU1yI04GwV1BZJiEq2VqvloFsEsaK6JoEBnWyr1SoEgTcMYxN+fIIfH2NcH+r1ej4oX6/X24TWfdU1+SvgfM2yrHJYl8E7AfcQnD2wd6MvZx/cY3APQ3OaZgnOVlXXZhpygH8vhHV3MBjsgPcGbvLx5uwWwXtrGMZmUN5Wq1WA61xcOSMHXK3P2U1VsB/G3V04X4PhI/DezB7s52tx5v1PsGIFeoEdFaKSZTQ6APclGJlk8t/kwXtt2/bDoPz1ej0P3wvKBzsYmV4vuFDNZnND7iarnBRQedMOdsCrhjXLNM0SXK0nkX9xkDOPnHsI46dJgwQjA+4LxuOn4Vh6m8p2FVznwuhAu90ugXeaBp+Rx98qg1dtNpsb4XQhmeM/B9widMDZT2uQwtU6jA7AfaUNXZhHB2zb3pUcJ72reYIJvJNOpxPYQDkzU6QLcLU+6z0nB/hgJ22yJ+mCsw/eiXK6MJcOMH4G7gsl80DIuQnuseM4e0rpAhiZbvdLMQhEo9EoyN1kllTdML/owgPwqmFST+J0Ac5WmXnk3CMYPVHKWcSELoyfw7iihC7AdS7s+r29/bol6YB6FizHg1kCr9poNALpS7f7pZjIeFiADpxKZUCDd5WY0oUn4B7FRBeCP/Ivy3GcfXns9Hmp++lCv9/fjv47I35AqoleFfrbWmk/YkoX9sA7VV4oSQfGFS3VRDGlC0ftdjuiRB21UMPhI7mbhJb69GRXRXeFYjl6yckoUSM+VyjyB/QV8mN1heDu/YKOx2fwXoceQd2EfDHbFZI8alFX6O69gNutxVyP0QHcvVsWIT9eV+h2658SL4uQr8IV+gPAcgj5qlwhHwD9hXzVrpAPiJEB9yWj0UF4x9QJ+apdIR+Q+UJ+Yi/zudj0cIV8gBYQ8i2rnL4UrIcr5AOkn5Cvmyv0G7BfQn7oyzwtuqCjK/QHwNlCvnwHJk8XdHWFfADVC/m6u0I+oGqFfN1dIR9QdUL+srhC0/AJ+cdp0oVlcYWmsYiQf3FxkY/3r4nL5QpNQ9IFezceIT/a0tEV+i2gkwX31XA4fKyqSDq7QtOQdKG/PYsuJL0mN3Dc0vRPFy7KB7vc/ZMAAAAASUVORK5CYII=");
+}
+
+.clearfix {
+    clear: both;
+}
+
+a {
+    color: #ccf;
+}
+
+dt {
+    font-weight: bold;
+    background-color: rgba(256, 256, 256, 0.1);
+    padding: 5px;
+}
+
+dd {
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+dd ul {
+    margin: 0 0 0 1em;
+    padding: 0;
+}
+
+dd ul li:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+header {
+    position: relative;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+header h1 {
+    padding: 0.5em;
+    font-weight: 100;
+    text-align: center;
+    margin: 0;
+}
+
+header h1 a {
+    color: white;
+    text-decoration: none
+}
+
+nav {
+    background-color: rgb(40, 73, 128);
+    width: 100%;
+    padding: 5px;
+    margin: 0 0 1em 0;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-left: 1em;
+    padding: 2px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none
+}
+
+main {
+    padding: 1em;
+    background-color: rgb(40, 73, 128);
+    border-radius: 5px;
+    border: 0px solid transparent;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+main h2 {
+    font-weight: 100;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+main .reports {
+    width: 20%;
+    float: left;
+    margin: 0 1em 0 0;
+    padding: 0;
+}
+
+main .reports ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+main .reports ul li {
+    margin-bottom: 5px;
+}
+
+main .content {
+    width: 75%;
+    float: right;
+}
+
+main .content .vis {
+    background-color: rgba(0, 0, 0, 0.3);
+    text-align: center;
+    padding: 1em;
+}
+
+footer {
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    padding: 0.5em;
+    margin: 1em 0 0 0;
+    text-align: center;
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+
+.runs .current {
+    color: #cfb;
+}
+
+.vis * {
+    stroke: #eef;
+}
+
+.vis .data {
+    stroke-width: 2px;
+    stroke: #aad;
+}
+
+.vis .data-text {
+    stroke: none;
+    fill: #aad;
+}

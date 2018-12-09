@@ -13,7 +13,8 @@ reports_api = [
 ]
 
 reports_views = [
+    path('', views.list_reports),
     path('reports/', views.list_reports),
     path('report/<int:report_id>/', views.show_report),
-    path('run/<int:run_id>/', views.show_run),
+    path('report/<int:report_id>/run/<int:run_id>/', views.show_run),
 ]

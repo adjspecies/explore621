@@ -1,10 +1,13 @@
 import datetime
 from pytz import UTC
 
+from django.db.models import Max
+
+from posts.models import Post
+
 
 FIRST = datetime.datetime(2007, 2, 10, 7, 17, 30, tzinfo=UTC)
-NOW = datetime.datetime.utcnow()
-NOW = NOW.replace(tzinfo=UTC)
+LATEST = Post.objects.aggregate(now=Max('created_at'))['now']
 
 def too_early(year=None, month=None, day=None, hour=None, minute=None,
                second=None):
@@ -24,7 +27,7 @@ def dict_to_key_value_list(d):
             [(k2, v2) for k2, v2 in d.items()])]
 
 def date_range(days, offset):
-    start = NOW\
+    start = LATEST\
         - datetime.timedelta(days=days)\
         - datetime.timedelta(days=offset)
     end = start + datetime.timedelta(days=days)

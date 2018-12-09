@@ -21,7 +21,7 @@ class BaseRunner(object):
         self.report = report
         self.model = models.Run(report=self.report)
         self.model.save()
-        if len(self.report.attributes):
+        if self.report.attributes and len(self.report.attributes):
             attributes = loads(self.report.attributes)
             for key, value in attributes.items():
                 self.default_attribute(key, value)
