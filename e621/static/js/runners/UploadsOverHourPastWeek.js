@@ -30,6 +30,7 @@ function UploadsOverHourPastWeek(data) {
     .y((d) => yScale(d.value));
   vis.append('path')
     .datum(data)
+    .style('fill', 'none')
     .attr('class', 'data')
     .attr('d', line);
 }
