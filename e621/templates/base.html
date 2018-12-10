@@ -1,3 +1,4 @@
+{% load flatpages %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -21,11 +22,20 @@
         <main>
         {% if title %}<h2>{{ title }}</h2>{% elif flatpage.title %}<h2>{{ flatpage.title }}</h2>{% endif %}
             <section class="reports">
+                {% if flatpage.title %}
+                {% get_flatpages as flatpages %}
+                <ul>
+                    {% for page in flatpages %}
+                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
                 <ul>
                     {% for report in reports %}
                     <li><a href="{{ report.get_absolute_url }}">{{ report.title }}</a></li>
                     {% endfor %}
                 </ul>
+                {% endif %}
             </section>
             <section class="content">
                 {% block content %}{% endblock %}
