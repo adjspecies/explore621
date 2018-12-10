@@ -26,8 +26,9 @@
     </ul></dd>
 </dl>
 <div id="vis"></div>
-<script type="text/javascript" src="{% static 'js/runners/' %}{{ report.runner }}.js"></script>
+<script type="text/javascript" src="{% static 'js/vis.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/runners.js' %}"></script>
 <script type="text/javascript">
-    {{ report.runner }}({{ run.result|safe }});
+    window.explore621.runners.{{ report.runner }}({{ run.result|safe }});
 </script>
 {% endblock %}
