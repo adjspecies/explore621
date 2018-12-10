@@ -209,7 +209,7 @@ class TagPopularityOverMonth(BaseRunner):
         self.result = []
         for date, data in self.query(self.tag).items():
             self.result.append({
-                'key': year,
+                'key': date,
                 'value': [
                     {
                         'key': 'score',
@@ -260,7 +260,7 @@ class TagPopularityOverDay(BaseRunner):
         self.result = []
         for date, data in self.query(self.tag).items():
             self.result.append({
-                'key': year,
+                'key': date,
                 'value': [
                     {
                         'key': 'score',

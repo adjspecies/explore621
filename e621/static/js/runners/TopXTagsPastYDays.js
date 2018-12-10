@@ -27,9 +27,9 @@ function TopXTagsPastYDays(data) {
   let yScale = d3.scaleLinear()
     .domain([100, 0]).nice()
     .rangeRound([0, height - 20]);
-  let xScale = d3.scaleBand()
-    .domain(dates)
-    .rangeRound([100, width]);
+  let xScale = d3.scaleTime()
+    .domain([d3.min(dates), d3.max(dates)])
+    .range([100, width]);
   let color = d3.scaleOrdinal(d3.schemeCategory10)
     .domain(tags);
 
@@ -44,31 +44,39 @@ function TopXTagsPastYDays(data) {
     .attr('transform', `translate(0, ${height - 20})`)
     .call(xAxis);
 
-  let rect = vis.append('g')
+  let area = d3.area()
+    .curve(d3.curveLinear)
+    .x((d, i) => xScale(dates[i]))
+    .y0(d => yScale(d[0]))
+    .y1(d => yScale(d[1]));
+
+
+  let slice = vis.append('g')
     .attr('class', 'data')
     .selectAll('g')
     .data(stacked_data)
     .enter()
     .append('g')
-    .attr('fill', (d) => color(d.key))
-    .attr('data-title', (d) => d.key)
-    .selectAll('g')
-    .data((d) => d)
-    .enter()
-    .append('g');
-  rect.append('rect')
-    .attr('x', (d, i) => xScale(Date.parse(data[i].key)))
-    .attr('y', (d) => yScale(d[1]))
-    .attr('height', (d) => yScale(d[0]) - yScale(d[1]))
-    .attr('width', xScale.bandwidth());
-  rect.append('text')
+    .on('mouseover', function() {
+      d3.select(this).select('text').style('display', 'block');
+    })
+    .on('mouseout', function() {
+      d3.select(this).select('text').style('display', 'none');
+    })
+    .on('mousemove', function() {
+      let mouse = d3.mouse(this)
+      d3.select(this)
+        .select('text')
+        .attr('x', mouse[0] + 10)
+        .attr('y', mouse[1]);
+    });
+  slice.append('path')
+    .attr('d', d => area(d))
+    .style('cursor', 'crosshair')
+    .attr('fill', d => color(d.key))
+    .attr('title', (d, i) => stacked_data[i].key);
+  slice.append('text')
+    .text(d => d.key)
     .attr('stroke-width', '0')
-    .attr('text-anchor', 'middle')
-    .attr('fill', '#fff')
-    .attr('x', (d, i) => xScale(Date.parse(data[i].key)) + xScale.bandwidth() / 2)
-    .attr('y', (d) => yScale(d[0]) + (yScale(d[1]) - yScale(d[0])) / 2)
-    .text((d, i, els) => yScale(d[1]) - yScale(d[0]) ? els[0].parentElement.parentElement.dataset['title'] : '');
-  function debug(d, i, els) {
-    debugger;
-  }
+    .style('display', 'none');
 }

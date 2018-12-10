@@ -226,20 +226,22 @@ class TopXTagsPastYDaysByType(BaseRunner):
 
     def run(self):
         self.result = []
-        start, end = date_range(self.days, self.days_offset)
-        result_set = Post.objects\
-            .filter(created_at__gt=start)\
-            .filter(created_at__lt=end)\
-            .filter(tags__tag_type=self.tag_type_id)\
-            .values('tags__tag')\
-            .annotate(count=Count('tags__tag'))\
-            .order_by('-count')[
-                self.count_offset:self.count_offset + self.count]
-        for result in result_set:
-            self.result.append({
-                'key': result['tags__tag'],
-                'value': result['count'],
-            })
+        for i in range(self.days + self.days_offset, self.days_offset, -1):
+            day = LATEST - datetime.timedelta(days=i)
+            result_set = Post.objects\
+                .filter(created_at__gt=day)\
+                .filter(created_at__lt=day + datetime.timedelta(days=1))\
+                .filter(tags__tag_type=self.tag_type_id)\
+                .values('tags__tag')\
+                .annotate(count=Count('tags__tag'))\
+                .order_by('-count')[
+                    self.count_offset:self.count + self.count_offset]
+            this_result = {
+                'key': day.strftime('%Y-%m-%d'),
+            }
+            for result in result_set:
+                this_result[result['tags__tag']] = result['count']
+            self.result.append(this_result)
 
     def generate_result(self):
         self.set_result(json.dumps(self.result))

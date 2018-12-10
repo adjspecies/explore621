@@ -8,7 +8,7 @@ from reports.runners.utils import (
     FIRST,
     LATEST,
     dict_to_key_value_list,
-    too_early
+    date_out_of_bounds
 )
 from reports.runners.base import (
     BaseRunner,
@@ -24,6 +24,8 @@ class TagsOverTimeRunner(BaseRunner):
         if len(self.tags) > 25:
             raise InvalidAttribute('Cannot use more than 25 tags', self.tags)
         self.default_attribute('omit_empty', False)
+        self.default_attribute('omit_final', False)
+        self.default_attribute('relative', False)
 
 
 class TagsOverYear(TagsOverTimeRunner):
@@ -39,8 +41,14 @@ class TagsOverYear(TagsOverTimeRunner):
 
     def run(self):
         self.result = {}
+        sums = {}
         for tag in (self.tags):
-            for year in range(FIRST.year, LATEST.year + 1):
+            plus = 1
+            if self.omit_final:
+                plus = 0
+            for year in range(FIRST.year, LATEST.year + 0):
+                if year not in sums:
+                    sums[year] = 0
                 if tag not in self.result:
                     self.result[tag] = {}
                 result = Post.objects\
@@ -50,8 +58,12 @@ class TagsOverYear(TagsOverTimeRunner):
                 if self.omit_empty and result == 0:
                     continue
                 self.result[tag][year] = result
+                sums[year] += result
         for tag, years in self.result.items():
             for year, value in years.items():
+                if self.relative:
+                    value /= sums[year]
+                    self[tag][year] = value
                 self.add_datum(tag, year, value)
 
     def generate_result(self):
@@ -75,11 +87,16 @@ class TagsOverMonth(TagsOverTimeRunner):
 
     def run(self):
         self.result = {}
+        sums = {}
         for tag in (self.tags):
             for year in range(FIRST.year, LATEST.year + 1):
+                month = 0
                 for month in range(1, 13):
-                    if too_early(year=year, month=month):
+                    if date_out_of_bounds(year=year, month=month):
                         continue
+                    date = '{}-{:0>2}'.format(year, month)
+                    if date not in sums:
+                        sums[date] = 0
                     if tag not in self.result:
                         self.result[tag] = {}
                     result = Post.objects\
@@ -89,10 +106,16 @@ class TagsOverMonth(TagsOverTimeRunner):
                         .count()
                     if self.omit_empty and result == 0:
                         continue
-                    self.result[tag][
-                            '{}-{:0>2}'.format(year, month)] = result
+                    self.result[tag][date] = result
+                    sums[date] += result
+                if self.omit_final:
+                    sums[date] -= self.result[tag][date]
+                    del(self.result[tag][date])
         for tag, dates in self.result.items():
             for date, value in dates.items():
+                if self.relative:
+                    value /= sums[date]
+                    self.result[tag][date] = value
                 self.add_datum(tag, date, value)
 
     def generate_result(self):
@@ -116,6 +139,7 @@ class TagsOverDay(TagsOverTimeRunner):
 
     def run(self):
         self.result = {}
+        sums = {}
         for tag in (self.tags):
             if tag not in self.result:
                 self.result[tag] = {}
@@ -129,11 +153,24 @@ class TagsOverDay(TagsOverTimeRunner):
                     date = curr.strftime('%Y-%m-%d')
                     self.result[tag][date] = 0
                     curr += datetime.timedelta(days=1)
+            date = ''
             for result in result_set:
                 date = result['created_at__date'].strftime('%Y-%m-%d')
+                if date not in sums:
+                    sums[date] = 0
                 self.result[tag][date] = result['count']
+                sums[date] += result['count']
+            if self.omit_final:
+                sums[date] -= self.result[tag][date]
+                del(self.result[tag][date])
         for tag, dates in self.result.items():
             for date, value in dates.items():
+                if self.relative:
+                    try:
+                        value /= sums[date]
+                        self.result[tag][date] = value
+                    except:
+                        pass
                 self.add_datum(tag, date, value)
 
     def generate_result(self):

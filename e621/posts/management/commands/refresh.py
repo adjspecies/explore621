@@ -48,7 +48,7 @@ class Command(BaseCommand):
             r = requests.get(
                 'https://e621.net/post/index.json',
                 {'page': i},
-                headers={'user-agent': '[adjective][species]'})
+                headers={'user-agent': '[adjective][species] user: maddypaws'})
             if r.status_code != 200:
                 self.stdout.write(
                     self.style.NOTICE('    got {} on page {}, skipping'.format(

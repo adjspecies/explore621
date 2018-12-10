@@ -9,8 +9,8 @@ from posts.models import Post
 FIRST = datetime.datetime(2007, 2, 10, 7, 17, 30, tzinfo=UTC)
 LATEST = Post.objects.aggregate(now=Max('created_at'))['now']
 
-def too_early(year=None, month=None, day=None, hour=None, minute=None,
-               second=None):
+def date_out_of_bounds(year=None, month=None, day=None, hour=None,
+                       minute=None, second=None):
     to_check = datetime.datetime(    
         year=year or FIRST.year,
         month=month or FIRST.month,
@@ -19,7 +19,8 @@ def too_early(year=None, month=None, day=None, hour=None, minute=None,
         minute=minute or FIRST.minute,
         second=second or FIRST.second,
         tzinfo=UTC)
-    return to_check < FIRST
+    second = datetime.timedelta(seconds=1)
+    return to_check + second < FIRST or to_check - second > LATEST
 
 def dict_to_key_value_list(d):
     return [
