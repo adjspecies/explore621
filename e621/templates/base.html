@@ -1,10 +1,13 @@
 {% load flatpages %}
 {% load static %}
+{% load markdown %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{% if title %}{{ title }} | {% elif flatpage.title %}{{ flatpage.title }} | {% endif %}explore621</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pygments.css' %}" />
+        {% titlefont %}
         <link rel="icon" type="image/png" href="{% static 'images/favicon-32x32.png' %}" />
         <script type="text/javascript" src="{% static 'js/d3/d3.min.js' %}"></script>
     </head>
@@ -20,7 +23,7 @@
             </nav>
         </header>
         <main>
-        {% if title %}<h2>{{ title }}</h2>{% elif flatpage.title %}<h2>{{ flatpage.title }}</h2>{% endif %}
+        {% if title %}<h2>{{ title }}</h2>{% endif %}
             <section class="reports">
                 {% if flatpage.title %}
                 {% get_flatpages as flatpages %}
@@ -43,7 +46,7 @@
             <br class="clearfix" />
         </main>
         <footer>
-            <p>&copy; 2018 [adjective][species]. This project is not affiliated with e621 or its creators. <a href="https://github.com/makyo/explore621" target="_blank">View on GitHub</a>.</p>
+            <p>&copy; 2018 <a href="https://adjectivespecies.com" target="_blank">[adjective][species]</a>. This project is not affiliated with e621 or its creators. <a href="https://github.com/adjspecies/explore621" target="_blank">View on GitHub</a>.</p>
         </footer>
     </body>
 </html>

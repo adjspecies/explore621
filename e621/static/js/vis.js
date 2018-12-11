@@ -5,10 +5,10 @@ window.explore621.vis = window.explore621.vis || (function() {
   module.relative_popularity = function(vis, data, dateFn) {
     const score = data.map(d => {
       return {key: d.key, value: d.value[0].value};
-    };);
+    });
     const fav_count = data.map(d => {
       return {key: d.key, value: d.value[1].value};
-    };);
+    });
 
     const width = 800;
     const height = 600;
@@ -56,10 +56,10 @@ window.explore621.vis = window.explore621.vis || (function() {
   module.popularity = function(vis, data, dateFn) {
     const score = data.map(d => {
       return {key: d.key, value: d.value[0].value};
-    };);
+    });
     const fav_count = data.map(d => {
       return {key: d.key, value: d.value[1].value};
-    };);
+    });
 
     const width = 800;
     const height = 600;
@@ -140,7 +140,7 @@ window.explore621.vis = window.explore621.vis || (function() {
         .attr('stroke-width', '0')
         .attr('x', width)
         .attr('y', yScale(datum.value[datum.value.length - 1].value));
-    };);
+    });
   };
 
 
@@ -159,9 +159,9 @@ window.explore621.vis = window.explore621.vis || (function() {
       tags.forEach((k) => {
         data[i][k] = data[i][k] || 0;
         sum += data[i][k];
-      };);
+      });
       tags.forEach((k) => data[i][k] = (data[i][k] / sum) * 100);
-    };);
+    });
     const stacked_data = d3.stack()
       .keys(tags)(data)
 
@@ -200,17 +200,17 @@ window.explore621.vis = window.explore621.vis || (function() {
       .append('g')
       .on('mouseover', function() {
         d3.select(this).select('text').style('display', 'block');
-      };)
+      })
       .on('mouseout', function() {
         d3.select(this).select('text').style('display', 'none');
-      };)
+      })
       .on('mousemove', function() {
         const mouse = d3.mouse(this)
         d3.select(this)
           .select('text')
           .attr('x', mouse[0] + 10)
           .attr('y', mouse[1]);
-      };);
+      });
     slice.append('path')
       .attr('d', d => area(d))
       .style('cursor', 'crosshair')

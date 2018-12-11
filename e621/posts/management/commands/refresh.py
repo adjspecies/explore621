@@ -27,8 +27,17 @@ class Command(BaseCommand):
             nargs='?',
             type=int,
             default=750)
+        parser.add_argument(
+            '--per-page',
+            nargs='?',
+            type=int,
+            default=320,
+            dest='per_page')
+        parser.add_argument(
+            'username')
 
     def handle(self, *args, **options):
+        ua = '[adjective][species] (explore621) {}'.format(options['username'])
         started = datetime.now()
         started.replace(tzinfo=pytz.UTC)
         ingested = 0
@@ -40,15 +49,16 @@ class Command(BaseCommand):
         artists_added = {}
         self.stdout.write('Refreshing data from e621 starting at {}'.format(
             started.isoformat()))
-        self.stdout.write('Fetching {} pages worth of posts'.format(
-            options['pages']))
+        self.stdout.write(
+            'Fetching {} pages worth of posts at {} per page'.format(
+                options['pages'], options['per_page']))
         for i in range(1, options['pages'] + 1):
             time.sleep(1)
             self.stdout.write('--- Fetching page {}'.format(i))
             r = requests.get(
                 'https://e621.net/post/index.json',
-                {'page': i},
-                headers={'user-agent': '[adjective][species] user: maddypaws'})
+                {'limit': options['per_page'], 'page': i},
+                headers={'user-agent': ua})
             if r.status_code != 200:
                 self.stdout.write(
                     self.style.NOTICE('    got {} on page {}, skipping'.format(
