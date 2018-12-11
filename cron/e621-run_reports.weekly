@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/var/webapps/explore621/venv/bin/python /var/webapps/explore621/e621/manage.py run_reports --settings e621.prod_settings weekly >> /var/log/e621/reports.weekly

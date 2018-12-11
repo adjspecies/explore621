@@ -37,6 +37,17 @@ class SetStats(BaseRunner):
             'posts': posts_stats(),
             'ingests': ingest_stats(),
         }
+        self.add_data('site_stats', self.result)
+
+    def add_data(self, var, d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                self.add_data(k, v)
+            elif isinstance(v, list):
+                for i in v:
+                    self.add_data('{}-{}'.format(k, v.index(i)), i) 
+            else:
+                self.add_datum(var, k, str(v))
 
     def generate_result(self):
         self.set_result(json.dumps(self.result))

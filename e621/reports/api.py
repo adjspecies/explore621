@@ -58,7 +58,8 @@ def show_report(request, report_id):
                 'id': last_run.id,
                 'started': str(last_run.started),
                 'finished': str(last_run.finished),
-                'duration': str(last_run.finished - last_run.started),
+                'duration': 
+                    (last_run.finished - last_run.started).total_seconds(),
                 'result': json.loads(last_run.result),
             }
         except:
@@ -82,14 +83,14 @@ def show_report(request, report_id):
     except Report.DoesNotExist:
         return _error('report {} not found'.format(report_id), status=404)
 
-def show_run(request, run_id):
+def show_run(request, report_id, run_id):
     try:
         run = Run.objects.get(pk=run_id)
         response = {
             'id': run.id,
             'started': str(run.started),
             'finished': str(run.finished),
-            'duration': str(run.finished - run.started),
+            'duration': (run.finished - run.started).total_seconds(),
             'result': json.loads(run.result),
         }
         return _success(response)
