@@ -9,7 +9,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
     
     window.explore621.vis.relative_popularity(vis, data, d => d);
-  }
+  };
 
 
   module.RelativeTagPopularityOverMonth = function(data) {
@@ -19,7 +19,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.relative_popularity(vis, data, d => `${d}-01`)
-  }
+  };
 
 
   module.RelativeTagPopularityOverYear = function(data) {
@@ -29,7 +29,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.relative_popularity(vis, data, d => `${d}-01-01`)
-  }
+  };
 
 
   module.TagPopularityOverDay = function(data) {
@@ -39,7 +39,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.popularity(vis, data, d => d);
-  }
+  };
 
 
   module.TagPopularityOverMonth = function(data) {
@@ -49,7 +49,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.popularity(vis, data, d => `${d}-01`);
-  }
+  };
 
 
   module.TagPopularityOverYear = function(data) {
@@ -59,7 +59,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.popularity(vis, data, d => `${d}-01-01`);
-  }
+  };
 
 
   module.TagsOverDay = function(data) {
@@ -69,7 +69,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.tags_over_time(vis, data, d => d);
-  }
+  };
 
 
   module.TagsOverMonth = function(data) {
@@ -79,7 +79,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.tags_over_time(vis, data, d => `${d}-01`);
-  }
+  };
 
 
   module.TagsOverYear = function(data) {
@@ -89,7 +89,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.tags_over_time(vis, data, d => `${d}-01-01`);
-  }
+  };
 
 
   module.TopXTagsPastYDays = function(data) {
@@ -99,7 +99,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.stacked_tags(vis, data);
-  }
+  };
 
 
   module.TopXTagsPastYDaysByType = function(data) {
@@ -109,7 +109,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.stacked_tags(vis, data);
-  }
+  };
 
 
   module.TotalPopularityOverDay = function(data) {
@@ -119,7 +119,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.popularity(vis, data, d => d);
-  }
+  };
 
 
   module.TotalPopularityOverMonth = function(data) {
@@ -129,7 +129,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.popularity(vis, data, d => `${d}-01`);
-  }
+  };
 
 
   module.TotalPopularityOverYear = function(data) {
@@ -139,7 +139,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.popularity(vis, data, d => `${d}-01-01`);
-  }
+  };
 
 
   module.TotalPostsOverDay = function(data) {
@@ -149,7 +149,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.simple_line(vis, data, d => d);
-  }
+  };
 
 
   module.UploadsOverDay = function(data) {
@@ -159,7 +159,7 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.simple_line(vis, data, d => d);
-  }
+  };
 
 
   module.UploadsOverHourPastWeek = function(data) {
@@ -169,7 +169,20 @@ window.explore621.runners = window.explore621.runners || (function() {
       .append('g');
 
     window.explore621.vis.simple_line(vis, data, d => `${d}:00`);
-  }
+  };
+
+
+  module.SetStats = function(data) {
+    const id = "SetStats";
+
+    const vis = d3.select(`.${id}`)
+      .append('g')
+
+    vis.append('text')
+      .attr('x', 20)
+      .attr('y', 20)
+      .text('NOT IMPLEMENTED YET :( :( :(');
+  };
 
   return module;
 })();

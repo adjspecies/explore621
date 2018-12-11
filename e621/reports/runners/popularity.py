@@ -11,7 +11,7 @@ from reports.runners.base import (
 
 class TotalPopularityOverYear(BaseRunner):
     
-    help_text = """Average total popularity per year.
+    help_text = """### Average total popularity per year.
 
     This runner gets the average score and favorite count for all posts
     broken down by year.
@@ -49,7 +49,7 @@ class TotalPopularityOverYear(BaseRunner):
 
 class TotalPopularityOverMonth(BaseRunner):
 
-    help_text = """Average total popularity per month.
+    help_text = """### Average total popularity per month.
 
     This runner gets the average score and favorite count for all posts
     broken down by month.
@@ -89,7 +89,7 @@ class TotalPopularityOverMonth(BaseRunner):
 
 class TotalPopularityOverDay(BaseRunner):
 
-    help_text = """Average total popularity per day.
+    help_text = """### Average total popularity per day.
 
     This runner gets the average score and favorite count for all posts
     broken down by day.
@@ -131,7 +131,7 @@ class TotalPopularityOverDay(BaseRunner):
 
 class TagPopularityOverYear(BaseRunner):
 
-    help_text = """Tag popularity over year.
+    help_text = """### Tag popularity over year.
 
     This runner gets the popularity of a given tag broken down by year.
 
@@ -179,7 +179,7 @@ class TagPopularityOverYear(BaseRunner):
 
 class TagPopularityOverMonth(BaseRunner):
 
-    help_text = """Tag popularity over month.
+    help_text = """### Tag popularity over month.
 
     This runner gets the popularity of a given tag broken down by month.
 
@@ -228,7 +228,7 @@ class TagPopularityOverMonth(BaseRunner):
 
 class TagPopularityOverDay(BaseRunner):
 
-    help_text = """Tag popularity over day.
+    help_text = """### Tag popularity over day.
 
     This runner gets the popularity of a given tag in broken down by day.
 
@@ -279,7 +279,7 @@ class TagPopularityOverDay(BaseRunner):
 
 class RelativeTagPopularityOverYear(BaseRunner):
 
-    help_text = """Relative tag popularity over year.
+    help_text = """### Relative tag popularity over year.
 
     This runner gets the popularity of a given tag in relation to the
     popularity of all posts broken down by year.
@@ -325,7 +325,7 @@ class RelativeTagPopularityOverYear(BaseRunner):
 
 class RelativeTagPopularityOverMonth(BaseRunner):
 
-    help_text = """Relative tag popularity over month.
+    help_text = """### Relative tag popularity over month.
 
     This runner gets the popularity of a given tag in relation to the
     popularity of all posts broken down by month.
@@ -370,7 +370,7 @@ class RelativeTagPopularityOverMonth(BaseRunner):
 
 class RelativeTagPopularityOverDay(BaseRunner):
 
-    help_text = """Relative tag popularity over day.
+    help_text = """### Relative tag popularity over day.
 
     This runner gets the popularity of a given tag in relation to the
     popularity of all posts broken down by day.

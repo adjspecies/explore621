@@ -6,6 +6,8 @@ from django.db.models import Count
 from posts.models import (
     Post,
     Tag,
+    ingest_stats,
+    posts_stats,
 )
 from reports.runners.utils import (
     FIRST,
@@ -19,9 +21,29 @@ from reports.runners.base import (
 )
 
 
+class SetStats(BaseRunner):
+
+    help_text = """### Dashboard Runner: Basic statistics about the dataset.
+
+    This runner collects some statistics about the dataset itself.
+
+    Note: This is a dashboard runner and is not of much use in building reports
+    other than for the dashboard.
+    """
+
+    def run(self):
+        self.result = {
+            'reports': self.report._HACK_stats(),
+            'posts': posts_stats(),
+            'ingests': ingest_stats(),
+        }
+
+    def generate_result(self):
+        self.set_result(json.dumps(self.result))
+
 class TotalPostsOverDay(BaseRunner):
 
-    help_text = """Dashboard Runner: Total number of posts over time by day.
+    help_text = """### Dashboard Runner: Total number of posts over time by day.
 
     This runner collects the total number of posts uploaded to e621 broken
     down by day to show the growth of the site over time.
@@ -55,7 +77,7 @@ class TotalPostsOverDay(BaseRunner):
 
 class UploadsOverDay(BaseRunner):
 
-    help_text = """Dashboard Runner: Number of posts per day over time.
+    help_text = """### Dashboard Runner: Number of posts per day over time.
 
     This runner collects the number of posts uploaded to e621 per day to show
     the growth in use of the site over time.
@@ -87,7 +109,7 @@ class UploadsOverDay(BaseRunner):
 
 class UploadsOverHourPastWeek(BaseRunner):
 
-    help_text = """Dashboard Runner: Number of posts per hour over last week.
+    help_text = """### Dashboard Runner: Number of posts per hour over last week.
 
     This runner collects the number of posts uploaded to e621 per hour over the
     last week to show the growth in use of the site over time.
@@ -131,7 +153,7 @@ class UploadsOverHourPastWeek(BaseRunner):
 
 class TopXTagsPastYDays(BaseRunner):
 
-    help_text = """Dashboard Runner: Top X tags over last Y days.
+    help_text = """### Dashboard Runner: Top X tags over last Y days.
 
     This runner collects the top however many tags requested used per day in
     the last requested number of days and calculates the percent they were
@@ -185,7 +207,7 @@ class TopXTagsPastYDays(BaseRunner):
 
 class TopXTagsPastYDaysByType(BaseRunner):
 
-    help_text = """Dashboard Runner: Top X tags over last Y days.
+    help_text = """### Dashboard Runner: Top X tags over last Y days.
 
     This runner collects the top however many tags of a given type requested
     used per day in the last requested number of days and calculates the

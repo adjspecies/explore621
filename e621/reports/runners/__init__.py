@@ -20,6 +20,7 @@ RUNNERS = {
     'RelativeTagPopularityOverMonth': popularity.RelativeTagPopularityOverMonth,
     'RelativeTagPopularityOverDay': popularity.RelativeTagPopularityOverDay,
 
+    'SetStats': dashboard.SetStats,
     'TotalPostsOverDay': dashboard.TotalPostsOverDay,
     'UploadsOverDay': dashboard.UploadsOverDay,
     'UploadsOverHourPastWeek': dashboard.UploadsOverHourPastWeek,

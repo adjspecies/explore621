@@ -30,7 +30,7 @@ class TagsOverTimeRunner(BaseRunner):
 
 class TagsOverYear(TagsOverTimeRunner):
 
-    help_text = """Count of given tags per year.
+    help_text = """### Count of given tags per year.
 
     This runner gets the count of each of the specified tags per year.
 
@@ -76,7 +76,7 @@ class TagsOverYear(TagsOverTimeRunner):
 
 class TagsOverMonth(TagsOverTimeRunner):
 
-    help_text = """Count of given tags per month.
+    help_text = """### Count of given tags per month.
 
     This runner gets the count of each of the specified tags per month.
 
@@ -128,7 +128,7 @@ class TagsOverMonth(TagsOverTimeRunner):
 
 class TagsOverDay(TagsOverTimeRunner):
 
-    help_text = """Count of given tags per day.
+    help_text = """### Count of given tags per day.
 
     This runner gets the count of each of the specified tags per day.
 

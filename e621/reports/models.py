@@ -39,6 +39,18 @@ class Report(models.Model):
     def __str__(self):
         return self.title
 
+    @classmethod
+    def _HACK_stats(cls):
+        return {
+            'report_count': Report.objects.count(),
+            'run_count': Run.objects.count(),
+            'run_avg_duration': Run.objects.aggregate(
+                duration=models.Avg(
+                    models.F('finished') - models.F('started')))['duration']\
+                    .total_seconds(),
+            'datum_count': Datum.objects.count(),
+        }
+
 
 class Run(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
