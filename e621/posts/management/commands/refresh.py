@@ -27,16 +27,14 @@ class Command(BaseCommand):
             nargs='?',
             type=int,
             default=750)
-        parser.add_arguments(
+        parser.add_argument(
             '--per-page',
             nargs='?',
             type=int,
             default=320,
             dest='per_page')
-        parser.add_arguments(
-            'username',
-            nargs='1',
-            type=str)
+        parser.add_argument(
+            'username')
 
     def handle(self, *args, **options):
         ua = '[adjective][species] (explore621) {}'.format(options['username'])

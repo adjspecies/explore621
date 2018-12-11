@@ -9,6 +9,7 @@ Here's what you need to know.
 This is a Django project running on Python 3. As such, you'll need to get a python environment up and running. We suggest the following:
 
 ```bash
+# Fork the project
 # Get the project
 git clone git@github.com:[YOUR USER]/explore621
 cd explore621
@@ -25,7 +26,11 @@ cd e621
 ./manage.py migrate
 
 # Import some data (this will take a while...)
-./manage.py refresh
+# You can specify how many pages to retrieve, and how many posts per page.
+# You must specify your username - this doesn't log you in or anything, just
+# adds your username to the user-agent string. This lets e621 know who to
+# contact if there's a problem.
+./manage.py refresh --pages 5 --per-page 100 [YOUR e621 USERNAME]
 
 # Run the server
 ./manage.py runserver
