@@ -59,6 +59,8 @@ class MyRunner(BaseRunner):
 
 This is also the place to check the content of tags.
 
+Finally, runners should have a `help_text` attribute which contains a markdown string describing it and listing expected attributes. See the existing runners for the expected style.
+
 ### Displaying the data
 
 For each runner, there exists a means of displaying it using JavaScript and SVG. This is done through a function in `static/js/runners.js` named exactly the same as the runner in the `RUNNERS` dict above. This should simply get the container element using d3 and pass off the heavy lifting to a function in `static/js/vis.js`. There are a few existing visualization utilities available in there, so consider using (or modifying) one of those before writing a new one!
