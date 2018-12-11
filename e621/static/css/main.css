@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic');
 
-* {
-    margin: 0;
-    padding: 0;
-}
 
 body {
     position: absolute;
@@ -57,7 +53,7 @@ header {
 
 header h1 {
     padding: 0.5em;
-    font-weight: 100;
+    font-size: 30px;
     text-align: center;
     margin: 0;
 }
@@ -124,8 +120,13 @@ main .reports ul li {
 }
 
 main .content {
+    position: relative;
     width: 75%;
     float: right;
+}
+
+main .content * {
+    max-width: 100%;
 }
 
 main .content .vis {
@@ -142,6 +143,11 @@ footer {
     margin: 1em 0 0 0;
     text-align: center;
     background-color: rgba(128, 128, 128, 0.2);
+}
+
+
+.markdown h2 {
+    text-align: left;
 }
 
 

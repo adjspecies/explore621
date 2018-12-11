@@ -18,7 +18,7 @@ explore621 fetches new data from e621 once a day to keep from overwhelming their
 
 ## I changed a tag on a post in e621, will that show up here?
 
-Maybe. Once a day, we fetch information about the most recent 56,250 posts. Obviously, there aren't 56,250 new posts a day! However, when we see a post in those that we already have in our system, we update its information. This includes any new or removed tags. If the post you changed is in the most recent 56,250 posts, it will be updated the next time the refresh runs.
+Maybe. Once a day, we fetch information about the most recent number of posts (for a while, this was 56,250, it should now be 240,000) posts. Obviously, there aren't that many new posts a day! However, when we see a post in those that we already have in our system, we update its information. This includes any new or removed tags. If the post you changed is in the most recent batch of posts, it will be updated the next time the refresh runs.
 
 ## Who are you?
 

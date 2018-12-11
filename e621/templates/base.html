@@ -1,10 +1,13 @@
 {% load flatpages %}
 {% load static %}
+{% load markdown %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{% if title %}{{ title }} | {% elif flatpage.title %}{{ flatpage.title }} | {% endif %}explore621</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pygments.css' %}" />
+        {% titlefont %}
         <link rel="icon" type="image/png" href="{% static 'images/favicon-32x32.png' %}" />
         <script type="text/javascript" src="{% static 'js/d3/d3.min.js' %}"></script>
     </head>
@@ -20,7 +23,7 @@
             </nav>
         </header>
         <main>
-        {% if title %}<h2>{{ title }}</h2>{% elif flatpage.title %}<h2>{{ flatpage.title }}</h2>{% endif %}
+        {% if title %}<h2>{{ title }}</h2>{% endif %}
             <section class="reports">
                 {% if flatpage.title %}
                 {% get_flatpages as flatpages %}
