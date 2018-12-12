@@ -4,21 +4,44 @@ window.explore621.vis = window.explore621.vis || (function() {
 
   module.relative_popularity = function(vis, data, dateFn) {
     const score = data.map(d => {
-      return {key: d.key, value: d.value[0].value};
+      return {key: d.key, value: d.value
+        .filter(dd => dd.key === 'score')[0].value};
     });
     const fav_count = data.map(d => {
-      return {key: d.key, value: d.value[1].value};
+      return {key: d.key, value: d.value
+        .filter(dd => dd.key === 'fav_count')[0].value};
+    });
+    const score_sd = data.map(d => {
+      return {key: d.key, value: d.value
+        .filter(dd => dd.key === 'total_score_sd')[0].value};
+    });
+    const fav_count_sd = data.map(d => {
+      return {key: d.key, value: d.value
+        .filter(dd => dd.key === 'total_fav_count_sd')[0].value};
+    });
+    let sd_visible = true;
+    const score_var = data.map(d => {
+      return {key: d.key, value: d.value
+        .filter(dd => dd.key === 'total_score_var')[0].value};
+    });
+    const fav_count_var = data.map(d => {
+      return {key: d.key, value: d.value
+        .filter(dd => dd.key === 'total_fav_count_var')[0].value};
     });
 
     const width = 800;
     const height = 600;
 
     const yScale = d3.scaleLinear()
-      .domain([d3.max((score.concat(fav_count)).map((d) => d.value)), d3.min((score.concat(fav_count)).map((d) => d.value))])
-      .range([0, height - 20]);
+      .domain([
+        d3.max(([].concat(score, fav_count)).map((d) => d.value)
+          .concat([].concat(score_sd, fav_count_sd).map(d => d.value / 2))),
+        d3.min(([].concat(score, fav_count)).map((d) => d.value)
+          .concat([].concat(score_sd, fav_count_sd).map(d => -d.value / 2)))])
+      .range([0, height - 50]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].key)), Date.parse(dateFn(data[data.length - 1].key))])
-      .range([100, width]);
+      .range([100, width - 100]);
 
     const yAxis = d3.axisLeft(yScale);
     vis.append('g')
@@ -28,28 +51,97 @@ window.explore621.vis = window.explore621.vis || (function() {
     const xAxis = d3.axisBottom(xScale);
     vis.append('g')
       .attr('class', 'axis')
-      .attr('transform', `translate(0, ${height - 20})`)
+      .attr('transform', `translate(0, ${height - 50})`)
       .call(xAxis);
 
     const line = d3.line()
+      .curve(d3.curveMonotoneX)
       .x((d) => xScale(Date.parse(dateFn(d.key))))
       .y((d) => yScale(d.value));
+    const sd_area = d3.area()
+      .curve(d3.curveMonotoneX)
+      .x(d => xScale(Date.parse(dateFn(d.key))))
+      .y0(d => yScale(d.value / 2))
+      .y1(d => yScale(-d.value / 2))
+
     vis.append('path')
       .datum(score)
       .style('fill', 'none')
+      .style('stroke', '#1f77b4')
       .attr('class', 'data')
       .attr('d', line);
+    vis.append('text')
+      .text('score')
+      .attr('x', width - 95)
+      .attr('y', yScale(score[score.length - 1].value))
+      .attr('fill', '#1f77b4');
+    vis.append('path')
+      .datum(score_sd)
+      .style('display', () => sd_visible ? 'block' : 'none')
+      .attr('class', 'std-dev')
+      .attr('d', d => sd_area(d))
+      .attr('fill', '#1f77b4')
+      .attr('opacity', 0.5);
+
     vis.append('path')
       .datum(fav_count)
       .style('fill', 'none')
+      .style('stroke', '#ff7f0e')
       .attr('class', 'data')
-      .attr('stroke-dasharray', '10 5')
       .attr('d', line);
+    vis.append('text')
+      .text('fav_count')
+      .attr('x', width - 95)
+      .attr('y', yScale(fav_count[fav_count.length - 1].value))
+      .attr('fill', '#ff7f0e');
+    vis.append('path')
+      .datum(fav_count_sd)
+      .style('display', () => sd_visible ? 'block' : 'none')
+      .attr('class', 'std-dev')
+      .attr('d', d => sd_area(d))
+      .attr('fill', '#ff7f0e')
+      .attr('opacity', 0.5);
+
     vis.append('line')
       .attr('x1', 100)
-      .attr('x2', width)
+      .attr('x2', width - 100)
       .attr('y1', yScale(0))
       .attr('y2', yScale(0));
+
+    const button = vis.append('g')
+      .classed('sd-button', true)
+      .classed('button-on', true);
+    button.append('rect')
+      .attr('x', width / 2 - 97)
+      .attr('y', height - 22)
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('width', 194)
+      .attr('height', 22);
+    button.append('text')
+      .text('Hide standard deviation')
+      .attr('class', 'sd-button button-on')
+      .attr('text-anchor', 'middle')
+      .attr('x', width / 2)
+      .attr('y', height - 5)
+      .on('click', () => {
+        sd_visible = !sd_visible;
+        if (sd_visible) {
+          vis.selectAll('.std-dev')
+            .style('display', 'block');
+          button.classed('button-on', true)
+            .classed('button-off', false)
+            .select('text')
+            .text('Hide standard deviation');
+        } else {
+          vis.selectAll('.std-dev')
+            .style('display', 'none');
+          button.classed('button-on', false)
+            .classed('button-off', true)
+            .select('text')
+            .text('Show standard deviation');
+        }
+      });
   };
 
 
@@ -83,6 +175,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .call(xAxis);
 
     const line = d3.line()
+      .curve(d3.curveMonotoneX)
       .x((d) => xScale(Date.parse(dateFn(d.key))))
       .y((d) => yScale(d.value));
     vis.append('path')
@@ -108,7 +201,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .range([0, height - 20]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].value[0].key)), Date.parse(dateFn(data[0].value[data[0].value.length - 1].key))])
-      .range([100, width]);
+      .range([100, width - 100]);
     const color = d3.scaleOrdinal(d3.schemeCategory10)
       .domain(data.map(d => d.key))
 
@@ -125,6 +218,7 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     data.forEach(datum => {
       const line = d3.line()
+        .curve(d3.curveMonotoneX)
         .x((d) => xScale(Date.parse(dateFn(d.key))))
         .y((d) => yScale(d.value));
       vis.append('path')
@@ -138,7 +232,7 @@ window.explore621.vis = window.explore621.vis || (function() {
         .text(datum.key)
         .attr('fill', color(datum.key))
         .attr('stroke-width', '0')
-        .attr('x', width)
+        .attr('x', width - 95)
         .attr('y', yScale(datum.value[datum.value.length - 1].value));
     });
   };
@@ -186,7 +280,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .call(xAxis);
 
     const area = d3.area()
-      .curve(d3.curveLinear)
+      .curve(d3.curveMonotoneX)
       .x((d, i) => xScale(dates[i]))
       .y0(d => yScale(d[0]))
       .y1(d => yScale(d[1]));
@@ -246,6 +340,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .call(xAxis);
 
     const line = d3.line()
+      .curve(d3.curveMonotoneX)
       .x((d) => xScale(Date.parse(dateFn(d.key))))
       .y((d) => yScale(d.value));
     vis.append('path')

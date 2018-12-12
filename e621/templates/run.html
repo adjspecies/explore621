@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="vis single">
-    <svg width="800" height="600" class="{{ report.runner }}"></svg>
+    <svg viewbox="0 0 800 600" width="800" height="600" class="{{ report.runner }}"></svg>
 </div>
 <dl class="report">
     <dt>Description</dt>
@@ -25,7 +25,6 @@
         {% endfor %}
     </ul></dd>
 </dl>
-<div id="vis"></div>
 <script type="text/javascript" src="{% static 'js/vis.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/runners.js' %}"></script>
 <script type="text/javascript">
