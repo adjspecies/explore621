@@ -25,6 +25,7 @@ def dashboard(request):
         'total_popularity_over_month': Report.objects.get(pk=18),
     }
     return render(request, 'dashboard.html', {
+        'title': 'Dashboard',
         'front_reports': front_reports,
         'reports': Report.objects.filter(unlisted=False),
         'ingests': IngestLog.objects.order_by('-id')[:5],

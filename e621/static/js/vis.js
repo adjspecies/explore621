@@ -48,12 +48,12 @@ window.explore621.vis = window.explore621.vis || (function() {
       .range([0, height - 50]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].key)), Date.parse(dateFn(data[data.length - 1].key))])
-      .range([100, width - 100]);
+      .range([60, width - 100]);
 
     const yAxis = d3.axisLeft(yScale);
     vis.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(100, 0)')
+      .attr('transform', 'translate(60, 0)')
       .call(yAxis);
     const xAxis = d3.axisBottom(xScale);
     vis.append('g')
@@ -168,12 +168,12 @@ window.explore621.vis = window.explore621.vis || (function() {
       .range([0, height - 20]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].key)), Date.parse(dateFn(data[data.length - 1].key))])
-      .range([100, width]);
+      .range([60, width - 100]);
 
     const yAxis = d3.axisLeft(yScale);
     vis.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(100, 0)')
+      .attr('transform', 'translate(60, 0)')
       .call(yAxis);
     const xAxis = d3.axisBottom(xScale);
     vis.append('g')
@@ -188,14 +188,25 @@ window.explore621.vis = window.explore621.vis || (function() {
     vis.append('path')
       .datum(score)
       .style('fill', 'none')
+      .style('stroke', '#1f77b4')
       .attr('class', 'data')
       .attr('d', line);
+    vis.append('text')
+      .text('score')
+      .attr('x', width - 95)
+      .attr('y', yScale(score[score.length - 1].value))
+      .attr('fill', '#1f77b4');
     vis.append('path')
       .datum(fav_count)
       .style('fill', 'none')
+      .style('stroke', '#ff7f0e')
       .attr('class', 'data')
-      .attr('stroke-dasharray', '10 5')
       .attr('d', line);
+    vis.append('text')
+      .text('fav_count')
+      .attr('x', width - 95)
+      .attr('y', yScale(fav_count[fav_count.length - 1].value))
+      .attr('fill', '#ff7f0e');
   };
 
 
@@ -271,14 +282,14 @@ window.explore621.vis = window.explore621.vis || (function() {
       .rangeRound([0, height - 20]);
     const xScale = d3.scaleTime()
       .domain([d3.min(dates), d3.max(dates)])
-      .range([100, width]);
+      .range([40, width]);
     const color = d3.scaleOrdinal(d3.schemeCategory10)
       .domain(tags);
 
     const yAxis = d3.axisLeft(yScale);
     vis.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(100, 0)')
+      .attr('transform', 'translate(40, 0)')
       .call(yAxis);
     const xAxis = d3.axisBottom(xScale);
     vis.append('g')
@@ -333,12 +344,12 @@ window.explore621.vis = window.explore621.vis || (function() {
       .range([0, height - 20]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].key)), Date.parse(dateFn(data[data.length - 1].key))])
-      .range([100, width]);
+      .range([80, width]);
 
     const yAxis = d3.axisLeft(yScale);
     vis.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(100, 0)')
+      .attr('transform', 'translate(80, 0)')
       .call(yAxis);
     const xAxis = d3.axisBottom(xScale);
     vis.append('g')
