@@ -26,7 +26,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       return {key: d.key, value: d.value
         .filter(dd => dd.key === 'total_fav_count_sd')[0].value};
     });
-    let sd_visible = true;
+    let sd_visible = false;
     const score_var = data.map(d => {
       return {key: d.key, value: d.value
         .filter(dd => dd.key === 'total_score_var')[0].value};
@@ -81,7 +81,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .text('score')
       .attr('x', width - 95)
       .attr('y', yScale(score[score.length - 1].value))
-      .attr('fill', '#1f77b4');
+      .style('fill', '#1f77b4');
     vis.append('path')
       .datum(score_sd)
       .style('display', () => sd_visible ? 'block' : 'none')
@@ -97,10 +97,10 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('class', 'data')
       .attr('d', line);
     vis.append('text')
-      .text('fav_count')
+      .text('fav count')
       .attr('x', width - 95)
       .attr('y', yScale(fav_count[fav_count.length - 1].value))
-      .attr('fill', '#ff7f0e');
+      .style('fill', '#ff7f0e');
     vis.append('path')
       .datum(fav_count_sd)
       .style('display', () => sd_visible ? 'block' : 'none')
@@ -110,14 +110,14 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('opacity', 0.5);
 
     vis.append('line')
-      .attr('x1', 100)
+      .attr('x1', 60)
       .attr('x2', width - 100)
       .attr('y1', yScale(0))
       .attr('y2', yScale(0));
 
     const button = vis.append('g')
       .classed('sd-button', true)
-      .classed('button-on', true);
+      .classed('button-off', true);
     button.append('rect')
       .attr('x', width / 2 - 97)
       .attr('y', height - 22)
@@ -126,8 +126,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('width', 194)
       .attr('height', 22);
     button.append('text')
-      .text('Hide standard deviation')
-      .attr('class', 'sd-button button-on')
+      .text('show standard deviation')
       .attr('text-anchor', 'middle')
       .attr('x', width / 2)
       .attr('y', height - 5)
@@ -195,7 +194,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .text('score')
       .attr('x', width - 95)
       .attr('y', yScale(score[score.length - 1].value))
-      .attr('fill', '#1f77b4');
+      .style('fill', '#1f77b4');
     vis.append('path')
       .datum(fav_count)
       .style('fill', 'none')
@@ -206,7 +205,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .text('fav_count')
       .attr('x', width - 95)
       .attr('y', yScale(fav_count[fav_count.length - 1].value))
-      .attr('fill', '#ff7f0e');
+      .style('fill', '#ff7f0e');
   };
 
 
