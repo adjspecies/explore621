@@ -2,12 +2,9 @@
 
 
 body {
-    position: absolute;
-    top: 0;
-    bottom: 0;
+    position: relative;
     margin: 0;
     padding: 0;
-    width: 100%;
     color: white;
     font-family: "Nanum Gothic", sans-serif;
     background-color: rgb(3, 17, 49);
@@ -65,7 +62,6 @@ header h1 a {
 
 nav {
     background-color: rgb(40, 73, 128);
-    width: 100%;
     padding: 5px;
     margin: 0 0 1em 0;
 }
@@ -88,25 +84,26 @@ nav ul li a {
 }
 
 main {
-    padding: 1em;
+    margin: 0;
     background-color: rgb(40, 73, 128);
-    border-radius: 5px;
-    border: 0px solid transparent;
-    max-width: 80%;
-    margin: 0 auto;
+}
+
+main section {
+    margin: 0;
+    padding: 0;
 }
 
 main h2 {
+    width: 100%;
     font-weight: 100;
     text-align: center;
     margin-bottom: 1em;
+    flex: none;
 }
 
 main .reports {
-    width: 20%;
-    float: left;
-    margin: 0 1em 0 0;
-    padding: 0;
+    padding: 0.5em;
+    flex-basis: 20%;
 }
 
 main .reports ul {
@@ -120,13 +117,7 @@ main .reports ul li {
 }
 
 main .content {
-    position: relative;
-    width: 75%;
-    float: right;
-}
-
-main .content * {
-    max-width: 100%;
+    flex-basis: 75%;
 }
 
 main .content .vis {
@@ -136,7 +127,6 @@ main .content .vis {
 }
 
 footer {
-    width: 100%;
     position: relative;
     bottom: 0;
     padding: 0.5em;
@@ -156,7 +146,6 @@ footer {
 }
 
 .vis svg {
-    width: 100%;
 }
 
 .vis * {
@@ -210,4 +199,35 @@ footer {
 
 #dashboard .vis-back {
     fill: rgba(0, 0, 0, 0.3);
+}
+
+@media only screen and (min-width: 1000px) {
+    main {
+        margin: 0 auto;
+        border-radius: 5px;
+        border: 0px solid transparent;
+        max-width: 80%;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    main {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    main {
+        display: block;
+    }
+    main h2 {
+        padding-top: 0.5em;
+    }
+    nav {
+        text-align: center;
+    }
+    nav ul li:first-of-type {
+        margin-left: 0;
+    }
 }
