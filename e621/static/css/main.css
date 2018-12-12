@@ -155,8 +155,35 @@ footer {
     color: #cfb;
 }
 
+.vis svg {
+    width: 100%;
+}
+
 .vis * {
     stroke: #eef;
+}
+
+.vis text, .vis tspan {
+    stroke: none;
+    fill: #eef;
+}
+
+.vis .button-on rect {
+    stroke: #eef;
+    stroke-width: 1px;
+    fill: #ccd;
+    padding: 2px;
+}
+
+.vis .button-on text {
+    fill: #223;
+}
+
+.vis .button-off rect {
+    stroke: #aab;
+    stroke-width: 1px;
+    fill: rgba(250, 250, 256, 0.1);
+    padding: 2px;
 }
 
 .vis .data {

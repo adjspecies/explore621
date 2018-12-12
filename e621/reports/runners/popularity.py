@@ -1,6 +1,10 @@
 import json
 
-from django.db.models import Avg
+from django.db.models import (
+    Avg,
+    StdDev,
+    Variance,
+)
 
 from posts.models import Post
 from reports.runners.base import (
@@ -22,19 +26,39 @@ class TotalPopularityOverYear(BaseRunner):
         built_result = []
         result_set = Post.objects\
             .values('created_at__year')\
-            .annotate(score=Avg('score'))\
-            .annotate(fav_count=Avg('fav_count'))
+            .annotate(score_avg=Avg('score'))\
+            .annotate(score_sd=StdDev('score'))\
+            .annotate(score_var=Variance('score'))\
+            .annotate(fav_count_avg=Avg('fav_count'))\
+            .annotate(fav_count_sd=StdDev('fav_count'))\
+            .annotate(fav_count_var=Variance('fav_count'))
         for result in result_set:
             built_result.append({
                 'key': result['created_at__year'],
                 'value': [
                     {
                         'key': 'score',
-                        'value': result['score'],
+                        'value': result['score_avg'],
+                    },
+                    {
+                        'key': 'score_sd',
+                        'value': result['score_sd'],
+                    },
+                    {
+                        'key': 'score_var',
+                        'value': result['score_var'],
                     },
                     {
                         'key': 'fav_count',
-                        'value': result['fav_count'],
+                        'value': result['fav_count_avg'],
+                    },
+                    {
+                        'key': 'fav_count_sd',
+                        'value': result['fav_count_sd'],
+                    },
+                    {
+                        'key': 'fav_count_var',
+                        'value': result['fav_count_var'],
                     },
                 ],
             })
@@ -60,21 +84,41 @@ class TotalPopularityOverMonth(BaseRunner):
         built_result = []
         result_set = Post.objects\
             .values('created_at__year', 'created_at__month')\
-            .annotate(score=Avg('score'))\
-            .annotate(fav_count=Avg('fav_count'))
+            .annotate(score_avg=Avg('score'))\
+            .annotate(score_sd=StdDev('score'))\
+            .annotate(score_var=Variance('score'))\
+            .annotate(fav_count_avg=Avg('fav_count'))\
+            .annotate(fav_count_sd=StdDev('fav_count'))\
+            .annotate(fav_count_var=Variance('fav_count'))
         for result in result_set:
             built_result.append({
-                'key': '{}-{}'.format(
+                'key': '{}-{:0>2}'.format(
                     result['created_at__year'],
                     result['created_at__month']),
                 'value': [
                     {
                         'key': 'score',
-                        'value': result['score'],
+                        'value': result['score_avg'],
+                    },
+                    {
+                        'key': 'score_sd',
+                        'value': result['score_sd'],
+                    },
+                    {
+                        'key': 'score_var',
+                        'value': result['score_var'],
                     },
                     {
                         'key': 'fav_count',
-                        'value': result['fav_count'],
+                        'value': result['fav_count_avg'],
+                    },
+                    {
+                        'key': 'fav_count_sd',
+                        'value': result['fav_count_sd'],
+                    },
+                    {
+                        'key': 'fav_count_var',
+                        'value': result['fav_count_var'],
                     },
                 ],
             })
@@ -101,22 +145,42 @@ class TotalPopularityOverDay(BaseRunner):
         result_set = Post.objects\
             .values('created_at__year', 'created_at__month',
                     'created_at__day')\
-            .annotate(score=Avg('score'))\
-            .annotate(fav_count=Avg('fav_count'))
+            .annotate(score_avg=Avg('score'))\
+            .annotate(score_sd=StdDev('score'))\
+            .annotate(score_var=Variance('score'))\
+            .annotate(fav_count_avg=Avg('fav_count'))\
+            .annotate(fav_count_sd=StdDev('fav_count'))\
+            .annotate(fav_count_var=Variance('fav_count'))
         for result in result_set:
             built_result.append({
-                'key': '{}-{}-{}'.format(
+                'key': '{}-{:0>2}-{:0>2}'.format(
                     result['created_at__year'],
                     result['created_at__month'],
                     result['created_at__day']),
                 'value': [
                     {
                         'key': 'score',
-                        'value': result['score'],
+                        'value': result['score_avg'],
+                    },
+                    {
+                        'key': 'score_sd',
+                        'value': result['score_sd'],
+                    },
+                    {
+                        'key': 'score_var',
+                        'value': result['score_var'],
                     },
                     {
                         'key': 'fav_count',
-                        'value': result['fav_count'],
+                        'value': result['fav_count_avg'],
+                    },
+                    {
+                        'key': 'fav_count_sd',
+                        'value': result['fav_count_sd'],
+                    },
+                    {
+                        'key': 'fav_count_var',
+                        'value': result['fav_count_var'],
                     },
                 ],
             })
@@ -146,12 +210,16 @@ class TagPopularityOverYear(BaseRunner):
         result_set = Post.objects\
             .filter(tags__tag=tag)\
             .values('created_at__year')\
-            .annotate(score=Avg('score'))\
-            .annotate(fav_count=Avg('fav_count'))
+            .annotate(score_avg=Avg('score'))\
+            .annotate(score_sd=StdDev('score'))\
+            .annotate(score_var=Variance('score'))\
+            .annotate(fav_count_avg=Avg('fav_count'))\
+            .annotate(fav_count_sd=StdDev('fav_count'))\
+            .annotate(fav_count_var=Variance('fav_count'))
         for result in result_set:
             intermediary[result['created_at__year']] = {
-                'score': result['score'],
-                'fav_count': result['fav_count'],
+                'score': result['score_avg'],
+                'fav_count': result['fav_count_avg'],
             }
         return intermediary
 
@@ -163,11 +231,27 @@ class TagPopularityOverYear(BaseRunner):
                 'value': [
                     {
                         'key': 'score',
-                        'value': data['score'],
+                        'value': result['score_avg'],
+                    },
+                    {
+                        'key': 'score_sd',
+                        'value': result['score_sd'],
+                    },
+                    {
+                        'key': 'score_var',
+                        'value': result['score_var'],
                     },
                     {
                         'key': 'fav_count',
-                        'value': data['fav_count'],
+                        'value': result['fav_count_avg'],
+                    },
+                    {
+                        'key': 'fav_count_sd',
+                        'value': result['fav_count_sd'],
+                    },
+                    {
+                        'key': 'fav_count_var',
+                        'value': result['fav_count_var'],
                     },
                 ]
             })
@@ -194,14 +278,18 @@ class TagPopularityOverMonth(BaseRunner):
         result_set = Post.objects\
             .filter(tags__tag=tag)\
             .values('created_at__year', 'created_at__month')\
-            .annotate(score=Avg('score'))\
-            .annotate(fav_count=Avg('fav_count'))
+            .annotate(score_avg=Avg('score'))\
+            .annotate(score_sd=StdDev('score'))\
+            .annotate(score_var=Variance('score'))\
+            .annotate(fav_count_avg=Avg('fav_count'))\
+            .annotate(fav_count_sd=StdDev('fav_count'))\
+            .annotate(fav_count_var=Variance('fav_count'))
         for result in result_set:
-            intermediary['{}-{}'.format(
+            intermediary['{}-{:0>2}'.format(
                 result['created_at__year'],
                 result['created_at__month'])] = {
-                'score': result['score'],
-                'fav_count': result['fav_count'],
+                'score': result['score_avg'],
+                'fav_count': result['fav_count_avg'],
             }
         return intermediary
 
@@ -213,11 +301,27 @@ class TagPopularityOverMonth(BaseRunner):
                 'value': [
                     {
                         'key': 'score',
-                        'value': data['score'],
+                        'value': result['score_avg'],
+                    },
+                    {
+                        'key': 'score_sd',
+                        'value': result['score_sd'],
+                    },
+                    {
+                        'key': 'score_var',
+                        'value': result['score_var'],
                     },
                     {
                         'key': 'fav_count',
-                        'value': data['fav_count'],
+                        'value': result['fav_count_avg'],
+                    },
+                    {
+                        'key': 'fav_count_sd',
+                        'value': result['fav_count_sd'],
+                    },
+                    {
+                        'key': 'fav_count_var',
+                        'value': result['fav_count_var'],
                     },
                 ]
             })
@@ -244,15 +348,19 @@ class TagPopularityOverDay(BaseRunner):
             .filter(tags__tag=tag)\
             .values('created_at__year', 'created_at__month',
                     'created_at__day')\
-            .annotate(score=Avg('score'))\
-            .annotate(fav_count=Avg('fav_count'))
+            .annotate(score_avg=Avg('score'))\
+            .annotate(score_sd=StdDev('score'))\
+            .annotate(score_var=Variance('score'))\
+            .annotate(fav_count_avg=Avg('fav_count'))\
+            .annotate(fav_count_sd=StdDev('fav_count'))\
+            .annotate(fav_count_var=Variance('fav_count'))
         for result in result_set:
-            intermediary['{}-{}-{}'.format(
+            intermediary['{}-{:0>2}-{:0>2}'.format(
                 result['created_at__year'],
                 result['created_at__month'],
                 result['created_at__day'])] = {
-                'score': result['score'],
-                'fav_count': result['fav_count'],
+                'score': result['score_avg'],
+                'fav_count': result['fav_count_avg'],
             }
         return intermediary
 
@@ -264,11 +372,27 @@ class TagPopularityOverDay(BaseRunner):
                 'value': [
                     {
                         'key': 'score',
-                        'value': data['score'],
+                        'value': result['score_avg'],
+                    },
+                    {
+                        'key': 'score_sd',
+                        'value': result['score_sd'],
+                    },
+                    {
+                        'key': 'score_var',
+                        'value': result['score_var'],
                     },
                     {
                         'key': 'fav_count',
-                        'value': data['fav_count'],
+                        'value': result['fav_count_avg'],
+                    },
+                    {
+                        'key': 'fav_count_sd',
+                        'value': result['fav_count_sd'],
+                    },
+                    {
+                        'key': 'fav_count_var',
+                        'value': result['fav_count_var'],
                     },
                 ]
             })
@@ -295,7 +419,7 @@ class RelativeTagPopularityOverYear(BaseRunner):
         total = TotalPopularityOverYear.query()
         for year in total:
             score = year['value'][0]['value']
-            fav_count = year['value'][1]['value']
+            fav_count = year['value'][3]['value']
             self.result.append({
                 'key': year['key'],
                 'value': [
@@ -314,6 +438,22 @@ class RelativeTagPopularityOverYear(BaseRunner):
                                 year['key'],
                                 {'fav_count': fav_count})['fav_count']\
                             - fav_count,
+                    },
+                    {
+                        'key': 'total_score_sd',
+                        'value': year['value'][1]['value'],
+                    },
+                    {
+                        'key': 'total_score_var',
+                        'value': year['value'][2]['value'],
+                    },
+                    {
+                        'key': 'total_fav_count_sd',
+                        'value': year['value'][4]['value'],
+                    },
+                    {
+                        'key': 'total_fav_count_var',
+                        'value': year['value'][5]['value'],
                     },
                 ]
             })
@@ -361,6 +501,22 @@ class RelativeTagPopularityOverMonth(BaseRunner):
                                 {'fav_count': fav_count})['fav_count']\
                             - fav_count,
                     },
+                    {
+                        'key': 'total_score_sd',
+                        'value': date['value'][1]['value'],
+                    },
+                    {
+                        'key': 'total_score_var',
+                        'value': date['value'][2]['value'],
+                    },
+                    {
+                        'key': 'total_fav_count_sd',
+                        'value': date['value'][4]['value'],
+                    },
+                    {
+                        'key': 'total_fav_count_var',
+                        'value': date['value'][5]['value'],
+                    },
                 ]
             })
 
@@ -405,6 +561,22 @@ class RelativeTagPopularityOverDay(BaseRunner):
                                 date['key'],
                                 {'fav_count': fav_count})['fav_count']\
                             - fav_count,
+                    },
+                    {
+                        'key': 'total_score_sd',
+                        'value': date['value'][1]['value'],
+                    },
+                    {
+                        'key': 'total_score_var',
+                        'value': date['value'][2]['value'],
+                    },
+                    {
+                        'key': 'total_fav_count_sd',
+                        'value': date['value'][4]['value'],
+                    },
+                    {
+                        'key': 'total_fav_count_var',
+                        'value': date['value'][5]['value'],
                     },
                 ]
             })
