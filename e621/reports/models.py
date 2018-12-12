@@ -19,6 +19,7 @@ class Report(models.Model):
     attributes = models.TextField(blank=True, null=True)
     max_stored_runs = models.IntegerField(default=1)
     requires_datum_models = models.BooleanField(default=False)
+    unlisted = models.BooleanField(default=False)
 
     def run(self):
         runner = RUNNERS[self.runner](self)

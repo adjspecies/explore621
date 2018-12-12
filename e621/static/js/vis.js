@@ -2,6 +2,13 @@ window.explore621 = window.explore621 || {};
 window.explore621.vis = window.explore621.vis || (function() {
   const module = {};
 
+  module.set_stats = function(vis, data) {
+    vis.append('text')
+      .attr('x', 20)
+      .attr('y', 20)
+      .text('NOT IMPLEMENTED YET :( :( :(');
+  };
+
   module.relative_popularity = function(vis, data, dateFn) {
     const score = data.map(d => {
       return {key: d.key, value: d.value

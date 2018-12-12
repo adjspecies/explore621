@@ -178,10 +178,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g')
 
-    vis.append('text')
-      .attr('x', 20)
-      .attr('y', 20)
-      .text('NOT IMPLEMENTED YET :( :( :(');
+    window.explore621.vis.set_stats(vis, data);
   };
 
   return module;

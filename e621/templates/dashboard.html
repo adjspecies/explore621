@@ -1,9 +1,90 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <section class="dashboard">
-    <div id="dashboard"></div>
+    <div id="dashboard">
+        <svg width="800" height="2000" viewbox="0 0 800 2000">
+            <g class="data_set_stats" transform="translate(0, 0)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Data-set statistics</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="total_posts_over_day" transform="translate(400, 0)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Total posts</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="uploads_over_day" transform="translate(0, 400)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Uploads per day</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="uploads_over_hour_past_week" transform="translate(400, 400)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Uploads per hour for the past week</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="top_10_tags_past_week" transform="translate(0, 800)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 10 tags for the past week</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="top_5_general_tags_past_week" transform="translate(400, 800)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 general tags for the past week</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="top_5_copyright_tags_past_week" transform="translate(0, 1200)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 copyright tags for the past week</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="top_5_character_tags_past_week" transform="translate(400, 1200)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 character tags for the past week</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="top_5_species_tags_past_week" transform="translate(0, 1600)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 species tags for the past week</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+            <g class="total_popularity_over_month" transform="translate(400, 1600)">
+                <text class="dash-title" text-anchor="middle" x="200", y="60">Average post popularity per month</text>
+                <g class="vis" transform="translate(0, 100) scale(0.5)" />
+            </g>
+        </svg>
+    </div>
 </section>
+<script type="text/javascript" src="{% static 'js/vis.js' %}"></script>
+<script type="text/javascript">
+window.explore621.vis.set_stats(
+    d3.select('.data_set_stats .vis').append('g'),
+    {{ front_reports.data_set_stats.last_run.result|safe }});
+window.explore621.vis.simple_line(
+    d3.select('.total_posts_over_day .vis').append('g'),
+    {{ front_reports.total_posts_over_day.last_run.result|safe }},
+    d => d);
+window.explore621.vis.simple_line(
+    d3.select('.uploads_over_day .vis').append('g'),
+    {{ front_reports.uploads_over_day.last_run.result|safe }},
+    d => d);
+window.explore621.vis.simple_line(
+    d3.select('.uploads_over_hour_past_week .vis').append('g'),
+    {{ front_reports.uploads_over_hour_past_week.last_run.result|safe }},
+    d => `${d}:00`);
+window.explore621.vis.stacked_tags(
+    d3.select('.top_10_tags_past_week .vis').append('g'),
+    {{ front_reports.top_10_tags_past_week.last_run.result|safe }});
+window.explore621.vis.stacked_tags(
+    d3.select('.top_5_general_tags_past_week .vis').append('g'),
+    {{ front_reports.top_5_general_tags_past_week.last_run.result|safe }});
+window.explore621.vis.stacked_tags(
+    d3.select('.top_5_copyright_tags_past_week .vis').append('g'),
+    {{ front_reports.top_5_copyright_tags_past_week.last_run.result|safe }});
+window.explore621.vis.stacked_tags(
+    d3.select('.top_5_character_tags_past_week .vis').append('g'),
+    {{ front_reports.top_5_character_tags_past_week.last_run.result|safe }});
+window.explore621.vis.stacked_tags(
+    d3.select('.top_5_species_tags_past_week .vis').append('g'),
+    {{ front_reports.top_5_species_tags_past_week.last_run.result|safe }});
+window.explore621.vis.popularity(
+    d3.select('.total_popularity_over_month .vis').append('g'),
+    {{ front_reports.total_popularity_over_month.last_run.result|safe }},
+    d => `${d}-01`);
+</script>
 <section class="injest-log">
     <h3>Ingest log</h3>
     <ul>
