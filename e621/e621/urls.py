@@ -29,5 +29,8 @@ from reports.urls import (
 urlpatterns = reports_views + [
     path('admin/', admin.site.urls),
     path('api/', include(posts_api + reports_api)),
-    path('<path:url>', flatpages_views.flatpage),
+    path('about/', flatpages_views.flatpage, {'url': '/about/'}),
+    path('about/faq/', flatpages_views.flatpage, {'url': '/about/faq/'}),
+    path('about/contributing/', flatpages_views.flatpage, {'url': '/about/contributing/'}),
+    path('about/how-it-works/', flatpages_views.flatpage, {'url': '/about/how-it-works/'}),
 ]
