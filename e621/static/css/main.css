@@ -192,6 +192,14 @@ footer {
     fill: #aad;
 }
 
+.subvis text {
+    font-size: 11pt;
+}
+
+.subvis .header {
+    font-size: 14pt;
+}
+
 #dashboard .dash-title {
     font-size: 20px;
     fill: #ccf;

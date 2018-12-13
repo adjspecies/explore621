@@ -39,7 +39,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ua = '[adjective][species] (explore621) {}'.format(options['username'])
         started = datetime.now()
-        started.replace(tzinfo=pytz.UTC)
+        started = started.replace(tzinfo=pytz.UTC)
         ingested = 0
         total_new = 0
         total_updated = 0
@@ -225,6 +225,13 @@ class Command(BaseCommand):
             tags_deleted += 1
         self.stdout.write(
             self.style.SUCCESS('{} empty tags deleted'.format(tags_deleted)))
+        self.stdout.write('Deleting empty sources')
+        sources_deleted = len([
+            s.delete() for s in
+            Source.objects.annotate(Count('post')).filter(post__count=0)])
+        artists_deleted = len([
+            a.delete() for a in
+            Artist.objects.annotate(Count('post')).filter(post__count=0)])
         log = IngestLog(
             started=started,
             records_ingested=ingested,
@@ -232,7 +239,9 @@ class Command(BaseCommand):
             updated=total_updated,
             last_id=last_id,
             fixed_tags=' '.join(fixed_tags),
-            deleted_tags=' '.join(deleted_tags))
+            deleted_tags=' '.join(deleted_tags),
+            sources_deleted=sources_deleted,
+            artists_deleted=artists_deleted)
         log.save()
         self.stdout.write(
             self.style.SUCCESS('Finished refreshing in {}'.format(

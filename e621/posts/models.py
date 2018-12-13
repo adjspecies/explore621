@@ -79,6 +79,8 @@ class IngestLog(models.Model):
     last_id = models.IntegerField()
     fixed_tags = models.TextField(blank=True)
     deleted_tags = models.TextField(blank=True)
+    sources_deleted = models.IntegerField(default=0)
+    artists_deleted = models.IntegerField(default=0)
 
     def fixed_tags_count(self):
         return len(self.fixed_tags.split(' '))
@@ -131,6 +133,8 @@ def posts_stats():
         'post_tags_count': post_tags_count,
         'post_sources_count': post_sources_count,
         'post_artists_count': post_artists_count,
+        'total_file_sizes': Post.objects.aggregate(
+            fs=models.Sum('file_size'))['fs'],
     }
 
 
@@ -162,6 +166,12 @@ def ingest_stats():
             .aggregate(avg=models.Avg('updated'))['avg'],
         'avg_fixed_tags_count': float(avg_fixed_tags_count),
         'avg_deleted_tags_count': float(avg_deleted_tags_count),
+        'avg_sources_deleted': IngestLog.objects\
+            .filter(sources_deleted__gt=0)\
+            .aggregate(avg=models.Avg('sources_deleted'))['avg'],
+        'avg_artists_deleted': IngestLog.objects\
+            .filter(artists_deleted__gt=0)\
+            .aggregate(avg=models.Avg('artists_deleted'))['avg'],
         'last_10': [{
             'duration': log.duration().total_seconds(),
             'processed': log.records_ingested,
@@ -169,5 +179,7 @@ def ingest_stats():
             'updated': log.updated,
             'fixed_tags_count': log.fixed_tags_count(),
             'deleted_tags_count': log.deleted_tags_count(),
+            'sources_deleted': log.sources_deleted,
+            'artists_deleted': log.artists_deleted,
         } for log in IngestLog.objects.order_by('-finished')[:10]],
     }
