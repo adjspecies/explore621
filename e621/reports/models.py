@@ -28,13 +28,14 @@ class Report(models.Model):
         return runner.run_report()
 
     def clear_runs(self):
-        if self.max_stored_runs == 0:
+        if self.max_stored_runs == 0 or \
+                self.max_stored_runs > self.run_set.count():
             return
         for run in self.run_set.order_by('-id')[self.max_stored_runs:]:
             run.delete()
 
     def last_run(self):
-        return self.run_set.order_by('-finished')[0]
+        return self.run_set.filter(completed=True).order_by('-finished')[0]
 
     def get_absolute_url(self):
         return '/report/{}/'.format(self.id)
@@ -62,6 +63,7 @@ class Run(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
     started = models.DateTimeField(auto_now_add=True)
     finished = models.DateTimeField(auto_now=True)
+    completed = models.BooleanField(default=False)
     result = models.TextField(blank=True)
 
     def duration(self):

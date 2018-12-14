@@ -49,7 +49,8 @@ class BaseRunner(object):
         try:
             self.run()
             self.generate_result()
-            self.model.save()  # Update finished time.
+            self.model.completed = True
+            self.model.save()  # Also updates finished time.
         except Exception as e:
             self.model.delete()
             raise RunError(e)

@@ -500,6 +500,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('d', line);
     vis.append('text')
       .text('score')
+      .attr('dominant-baseline', 'middle')
       .attr('x', width - 95)
       .attr('y', yScale(score[score.length - 1].value))
       .style('fill', '#1f77b4');
@@ -519,6 +520,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('d', line);
     vis.append('text')
       .text('fav count')
+      .attr('dominant-baseline', 'middle')
       .attr('x', width - 95)
       .attr('y', yScale(fav_count[fav_count.length - 1].value))
       .style('fill', '#ff7f0e');
@@ -613,6 +615,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('d', line);
     vis.append('text')
       .text('score')
+      .attr('dominant-baseline', 'middle')
       .attr('x', width - 95)
       .attr('y', yScale(score[score.length - 1].value))
       .style('fill', '#1f77b4');
@@ -623,7 +626,8 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('class', 'data')
       .attr('d', line);
     vis.append('text')
-      .text('fav_count')
+      .text('fav count')
+      .attr('dominant-baseline', 'middle')
       .attr('x', width - 95)
       .attr('y', yScale(fav_count[fav_count.length - 1].value))
       .style('fill', '#ff7f0e');
@@ -636,7 +640,7 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     const yScale = d3.scaleLinear()
       .domain([d3.max(data.map((d) => d.value.map(dd => dd.value)).reduce((m, d) => m.concat(d))), 0])
-      .range([0, height - 20]);
+      .range([20, height - 20]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].value[0].key)), Date.parse(dateFn(data[0].value[data[0].value.length - 1].key))])
       .range([100, width - 100]);
@@ -668,8 +672,8 @@ window.explore621.vis = window.explore621.vis || (function() {
         .attr('d', line);
       vis.append('text')
         .text(datum.key)
-        .attr('fill', color(datum.key))
-        .attr('stroke-width', '0')
+        .style('fill', color(datum.key))
+        .attr('dominant-baseline', 'middle')
         .attr('x', width - 95)
         .attr('y', yScale(datum.value[datum.value.length - 1].value));
     });
@@ -750,6 +754,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('title', (d, i) => stacked_data[i].key);
     slice.append('text')
       .text(d => d.key)
+      .attr('dominant-baseline', 'middle')
       .attr('stroke-width', '0')
       .style('display', 'none');
   };

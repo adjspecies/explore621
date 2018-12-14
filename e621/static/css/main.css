@@ -118,6 +118,7 @@ main .reports ul li {
 
 main .content {
     flex-basis: 75%;
+    overflow: scroll;
 }
 
 main .content .vis {
@@ -241,6 +242,9 @@ footer {
     }
     nav {
         text-align: center;
+    }
+    nav ul li {
+        margin-left: 0.5em;
     }
     nav ul li:first-of-type {
         margin-left: 0;

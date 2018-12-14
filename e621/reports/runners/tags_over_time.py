@@ -37,6 +37,11 @@ class TagsOverYear(TagsOverTimeRunner):
     Attributes:
 
     * `tags` - an array of tags to search for.
+    * `omit_empty` - whether or not to omit entries with value of 0
+        (default: false)
+    * `omit_final` - whether or not to omit the final entry (which might skew
+        the line low when run during the begining of the year).
+        (default: false)
     """
 
     def run(self):
@@ -83,6 +88,11 @@ class TagsOverMonth(TagsOverTimeRunner):
     Attributes:
 
     * `tags` - an array of tags to search for.
+    * `omit_empty` - whether or not to omit entries with value of 0
+        (default: false)
+    * `omit_final` - whether or not to omit the final entry (which might skew
+        the line low when run during the begining of the month).
+        (default: false)
     """
 
     def run(self):
@@ -135,6 +145,8 @@ class TagsOverDay(TagsOverTimeRunner):
     Attributes:
 
     * `tags` - an array of tags to search for.
+    * `omit_empty` - whether or not to omit entries with value of 0
+        (default: false)
     """
 
     def run(self):
