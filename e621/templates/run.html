@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 {% load markdown %}
+{% load humanize %}
 
 {% block content %}
 <div class="vis single">
     <svg viewbox="0 0 800 600" class="{{ report.runner }}"></svg>
 </div>
+{% if request.user.is_authenticated %}<p>
+<a href="/admin/reports/report/{{ report.id }}/change/">Edit</a> |
+<a href="/admin/reports/report/{{ report.id }}/delete/">Delete</a></p>{% endif %}
 <dl class="report">
     <dt>Description</dt>
     <dd>{{ report.description }}</dd>
@@ -21,9 +25,11 @@
     <dd><ul class="runs">
         {% for current in report.run_set.all reversed %}
         {% if current == run %}
-        <li class="current">#{{ current.id }} - run on {{ current.finished|date:'Y-m-d' }} in {{ current.duration }}</li>
+        <li class="current">#{{ current.id }} - run <abbr title="{{ current.finished|date:'Y-m-d H:i:s' }}">{{ current.finished|naturaltime }}</a> in {{ current.duration }}</li>
+        {% elif current.completed == False %}
+        <li><em>{{ current.id }} - started <abbr title="{{ current.started|date:'Y-m-d H:i:s' }}">{{ current.started|naturaltime }}</abbr> (running now...)</em></li>
         {% else %}
-        <li><a href="{{ current.get_absolute_url }}">#{{ current.id }} - run on {{ current.finished|date:'Y-m-d' }} in {{ current.duration }}</a></li>
+        <li><a href="{{ current.get_absolute_url }}">#{{ current.id }} - run <abbr title="{{ current.finished|date:'Y-m-d H:i:s' }}">{{ current.finished|naturaltime }}</abbr> in {{ current.duration }}</a></li>
         {% endif %}
         {% endfor %}
     </ul></dd>

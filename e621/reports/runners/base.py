@@ -1,6 +1,13 @@
+import pytz
 from json import loads
 
 from reports import models
+
+
+def utcnow():
+    now = pytz.datetime.datetime.now()
+    now = now.replace(tzinfo=pytz.UTC)
+    return now
 
 
 class MissingAttributeError(Exception):
@@ -19,7 +26,7 @@ class BaseRunner(object):
 
     def __init__(self, report):
         self.report = report
-        self.model = models.Run(report=self.report)
+        self.model = models.Run(report=self.report, started=utcnow())
         self.model.save()
         if self.report.attributes and len(self.report.attributes):
             attributes = loads(self.report.attributes)
@@ -50,7 +57,8 @@ class BaseRunner(object):
             self.run()
             self.generate_result()
             self.model.completed = True
-            self.model.save()  # Also updates finished time.
+            self.model.finished = utcnow()
+            self.model.save()
         except Exception as e:
             self.model.delete()
             raise RunError(e)
