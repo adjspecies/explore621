@@ -38,6 +38,8 @@
                 <ul>
                     {% for report in reports %}
                     <li><a href="{{ report.get_absolute_url }}">{{ report.title }}</a></li>
+                    {% empty %}
+                    <li><em>No public reports to list</em></li>
                     {% endfor %}
                 </ul>
                 {% endif %}

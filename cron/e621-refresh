@@ -1,4 +1,4 @@
 #!/bin/sh
 
 date > /var/log/e621/current.log
-/var/webapps/explore621/venv/bin/python /var/webapps/explore621/e621/manage.py refresh --settings e621.prod_settings >> /var/log/e621/current.log
+/var/webapps/explore621/venv/bin/python /var/webapps/explore621/e621/manage.py refresh --settings e621.prod_settings >> /var/log/e621/current.log 2>&1

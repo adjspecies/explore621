@@ -229,9 +229,16 @@ class Command(BaseCommand):
         sources_deleted = len([
             s.delete() for s in
             Source.objects.annotate(Count('post')).filter(post__count=0)])
+        self.stdout.write(
+            self.style.NOTICE('--- {} sources deleted'.format(
+                sources_deleted)))
+        self.stdout.write('Deleting empty artists')
         artists_deleted = len([
             a.delete() for a in
             Artist.objects.annotate(Count('post')).filter(post__count=0)])
+        self.stdout.write(
+            self.style.NOTICE('--- {} artists deleted'.format(
+                artists_deleted)))
         log = IngestLog(
             started=started,
             records_ingested=ingested,
@@ -245,4 +252,4 @@ class Command(BaseCommand):
         log.save()
         self.stdout.write(
             self.style.SUCCESS('Finished refreshing in {}'.format(
-                str(datetime.now() - started))))
+                str(log.finished - log.started))))
