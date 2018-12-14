@@ -12,8 +12,12 @@ window.explore621.vis = window.explore621.vis || (function() {
     const ingests = vis.append('g')
       .classed('subvis', true)
       .attr('transform', 'translate(400, 0)');
+    const reports = vis.append('g')
+      .classed('subvis', true)
+      .attr('transform', 'translate(400, 250)');
     module.set_stats._posts(posts, data.posts);
-    module.set_stats._ingests(ingests, data.ingests)
+    module.set_stats._ingests(ingests, data.ingests);
+    module.set_stats._reports(reports, data.reports);
   };
 
   module.set_stats._posts = function(vis, data) {
@@ -28,7 +32,7 @@ window.explore621.vis = window.explore621.vis || (function() {
     const posts_count = vis.append('g');
     posts_count.append('text')
       .classed('header', true)
-      .text(`Total posts: ${_(data.post_counts.total)}`)
+      .text(`Total posts: ${_(data.post_counts.total)} (${_f(data.total_file_sizes / 1024 / 1024 / 1024 / 1024)}TB)`)
       .attr('x', 10)
       .attr('y', 15);
     posts_count.append('text')
@@ -43,6 +47,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('height', 15)
       .attr('width', posts_count_scale(data.post_counts.safe))
     posts_count.append('text')
+      .text(_(data.post_counts.safe))
+      .classed('datum-text', true)
+      .attr('x', 110 + posts_count_scale(data.post_counts.safe))
+      .attr('y', 36);
+    posts_count.append('text')
       .text('questionable')
       .attr('text-anchor', 'end')
       .attr('x', 100)
@@ -54,6 +63,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('height', 15)
       .attr('width', posts_count_scale(data.post_counts.questionable))
     posts_count.append('text')
+      .text(_(data.post_counts.questionable))
+      .classed('datum-text', true)
+      .attr('x', 110 + posts_count_scale(data.post_counts.questionable))
+      .attr('y', 56);
+    posts_count.append('text')
       .text('explicit')
       .attr('text-anchor', 'end')
       .attr('x', 100)
@@ -64,6 +78,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('fill', '#b88')
       .attr('height', 15)
       .attr('width', posts_count_scale(data.post_counts.explicit))
+    posts_count.append('text')
+      .text(_(data.post_counts.explicit))
+      .classed('datum-text', true)
+      .attr('x', 110 + posts_count_scale(data.post_counts.explicit))
+      .attr('y', 76);
     posts_count.append('line')
       .attr('x1', 105)
       .attr('x2', 105)
@@ -100,6 +119,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('width', tags_count_scale(data.tag_counts.general))
       .attr('title', _(data.tag_counts.general));
     tags_count.append('text')
+      .text(_(data.tag_counts.general))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.general))
+      .attr('y', 36);
+    tags_count.append('text')
       .text('artist')
       .attr('text-anchor', 'end')
       .attr('x', 100)
@@ -111,6 +135,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('height', 15)
       .attr('width', tags_count_scale(data.tag_counts.artist))
       .attr('title', _(data.tag_counts.artist));
+    tags_count.append('text')
+      .text(_(data.tag_counts.artist))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.artist))
+      .attr('y', 56);
     tags_count.append('text')
       .text('copyright')
       .attr('text-anchor', 'end')
@@ -124,6 +153,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('width', tags_count_scale(data.tag_counts.copyright))
       .attr('title', _(data.tag_counts.copyright));
     tags_count.append('text')
+      .text(_(data.tag_counts.copyright))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.copyright))
+      .attr('y', 76);
+    tags_count.append('text')
       .text('character')
       .attr('text-anchor', 'end')
       .attr('x', 100)
@@ -136,6 +170,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('width', tags_count_scale(data.tag_counts.character))
       .attr('title', _(data.tag_counts.character));
     tags_count.append('text')
+      .text(_(data.tag_counts.character))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.character))
+      .attr('y', 96);
+    tags_count.append('text')
       .text('species')
       .attr('text-anchor', 'end')
       .attr('x', 100)
@@ -147,6 +186,11 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('height', 15)
       .attr('width', tags_count_scale(data.tag_counts.species))
       .attr('title', _(data.tag_counts.species));
+    tags_count.append('text')
+      .text(_(data.tag_counts.species))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.species))
+      .attr('y', 116);
     tags_count.append('line')
       .attr('x1', 105)
       .attr('x2', 105)
@@ -161,24 +205,49 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('x', 10)
       .attr('y', 15);
     relations.append('text')
-      .text(`Total tags on all posts: ${_(data.post_tags_count)}`)
-      .attr('x', 10)
+      .text('Total tags on all posts:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
       .attr('y', 35);
     relations.append('text')
-      .text(`Max tags per post: ${_(data.max_tags_per_post)}`)
-      .attr('x', 10)
+      .text(_(data.post_tags_count))
+      .attr('x', 165)
+      .attr('y', 35);
+    relations.append('text')
+      .text('Max tags per post:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
       .attr('y', 55);
     relations.append('text')
-      .text(`Avg tags per post: ${_f(data.avg_tags_per_post)}`)
-      .attr('x', 10)
+      .text(_(data.max_tags_per_post))
+      .attr('x', 165)
+      .attr('y', 55);
+    relations.append('text')
+      .text('Avg tags per post:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
       .attr('y', 75);
     relations.append('text')
-      .text(`Post artists: ${_(data.artist_count)} (used ${_(data.post_artists_count)} times)`)
-      .attr('x', 10)
+      .text(_f(data.avg_tags_per_post))
+      .attr('x', 165)
+      .attr('y', 75);
+    relations.append('text')
+      .text('Post artists:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
       .attr('y', 95);
     relations.append('text')
-      .text(`Post sources: ${_(data.source_count)} (used ${_(data.post_sources_count)} times)`)
-      .attr('x', 10)
+      .text(`${_(data.artist_count)} (used ${_(data.post_artists_count)} times)`)
+      .attr('x', 165)
+      .attr('y', 95);
+    relations.append('text')
+      .text('Post sources:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 115);
+    relations.append('text')
+      .text(`${_(data.source_count)} (used ${_(data.post_sources_count)} times)`)
+      .attr('x', 165)
       .attr('y', 115);
   };
 
@@ -189,7 +258,7 @@ window.explore621.vis = window.explore621.vis || (function() {
     const scaled = {};
     ['duration', 'processed', 'new', 'updated',
       'fixed_tags_count', 'deleted_tags_count',
-      /*'sources_deleted', 'artists_deleted'*/].forEach((d, i) => {
+      'sources_deleted', 'artists_deleted'].forEach((d, i) => {
         let curr = data.last_10.map(dd => dd[d]).reverse();
         let scale = d3.scaleLinear()
           .domain([d3.min(curr), d3.max(curr)])
@@ -197,18 +266,20 @@ window.explore621.vis = window.explore621.vis || (function() {
         curr = curr.map(dd => scale(dd) + (20 * i) + 21);
         scaled[d] = curr;
     });
+    
     vis.append('text')
       .text(`Total ingests: ${_(data.ingest_count)}`)
       .classed('header', true)
       .attr('x', 10)
       .attr('y', 15);
+
     vis.append('text')
-      .text('Average duration')
+      .text('Ingest duration')
       .attr('text-anchor', 'end')
       .attr('x', 150)
       .attr('y', 35);
     vis.append('text')
-      .text(`${_f(data.ingest_avg_duration)}s`)
+      .text(`${_f(data.ingest_avg_duration)}s (avg)`)
       .attr('x', 205)
       .attr('y', 35)
     vis.append('path')
@@ -216,6 +287,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .style('fill', 'none')
       .attr('class', 'data')
       .attr('d', sparkline);
+
     vis.append('text')
       .text('Posts processed')
       .attr('text-anchor', 'end')
@@ -230,6 +302,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .style('fill', 'none')
       .attr('class', 'data')
       .attr('d', sparkline);
+
     vis.append('text')
       .text('New posts')
       .attr('text-anchor', 'end')
@@ -244,6 +317,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .style('fill', 'none')
       .attr('class', 'data')
       .attr('d', sparkline);
+
     vis.append('text')
       .text('Updated posts')
       .attr('text-anchor', 'end')
@@ -258,6 +332,101 @@ window.explore621.vis = window.explore621.vis || (function() {
       .style('fill', 'none')
       .attr('class', 'data')
       .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Fixed tags')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 115);
+    vis.append('text')
+      .text(`${_f(data.avg_fixed_tags_count)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 115)
+    vis.append('path')
+      .datum(scaled.fixed_tags_count)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Deleted tags')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 135);
+    vis.append('text')
+      .text(`${_f(data.avg_deleted_tags_count)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 135)
+    vis.append('path')
+      .datum(scaled.deleted_tags_count)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Deleted sources')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 155);
+    vis.append('text')
+      .text(`${_f(data.avg_sources_deleted)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 155)
+    vis.append('path')
+      .datum(scaled.sources_deleted)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Deleted artists')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 175);
+    vis.append('text')
+      .text(`${_f(data.avg_artists_deleted)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 175)
+    vis.append('path')
+      .datum(scaled.artists_deleted)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+  };
+
+  module.set_stats._reports = function(vis, data) {
+    vis.append('text')
+      .classed('header', true)
+      .text(`Total reports: ${_(data.report_count)}`)
+      .attr('x', 10)
+      .attr('y', 15);
+    vis.append('text')
+      .text('Runs:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 36);
+    vis.append('text')
+      .text(_(data.run_count))
+      .attr('x', 165)
+      .attr('y', 36);
+    vis.append('text')
+      .text('Average run duration:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 56)
+    vis.append('text')
+      .text(_f(data.run_avg_duration))
+      .attr('x', 165)
+      .attr('y', 56);
+    vis.append('text')
+      .text('Datum models:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 76);
+    vis.append('text')
+      .text(_(data.datum_count))
+      .attr('x', 165)
+      .attr('y', 76);
   };
 
 

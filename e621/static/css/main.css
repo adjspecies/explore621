@@ -135,11 +135,13 @@ footer {
     background-color: rgba(128, 128, 128, 0.2);
 }
 
+.markdown * {
+    max-width: 100%;
+}
 
 .markdown h2 {
     text-align: left;
 }
-
 
 .runs .current {
     color: #cfb;
@@ -198,6 +200,11 @@ footer {
 
 .subvis .header {
     font-size: 14pt;
+    font-weight: bold;
+}
+
+.subvis .datum-text {
+    font-size: 8pt;
 }
 
 #dashboard .dash-title {

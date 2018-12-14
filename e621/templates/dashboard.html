@@ -4,54 +4,74 @@
 {% block content %}
 <section class="dashboard">
     <div id="dashboard">
-        <svg viewbox="0 40 800 2000">
+        <svg viewbox="0 40 800 2000" xmlns:xlink="http://www.w3.org/1999/xlink">
             <g class="data_set_stats" transform="translate(0, 0)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Data-set statistics</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.data_set_stats.get_absolute_url }}">Data-set statistics</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="total_posts_over_day" transform="translate(400, 0)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Total posts</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.total_posts_over_day.get_absolute_url }}">Total posts</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="uploads_over_day" transform="translate(0, 400)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Uploads per day</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.uploads_over_day.get_absolute_url }}">Uploads per day</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="uploads_over_hour_past_week" transform="translate(400, 400)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Uploads per hour for the past week</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.uploads_over_hour_past_week.get_absolute_url }}">Uploads per hour for the past week</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="top_10_tags_past_week" transform="translate(0, 800)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 10 tags for the past week</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.top_10_tags_past_week.get_absolute_url }}">Top 10 tags for the past week</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="top_5_general_tags_past_week" transform="translate(400, 800)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 general tags for the past week</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.top_5_general_tags_past_week.get_absolute_url }}">Top 5 general tags for the past week</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="top_5_copyright_tags_past_week" transform="translate(0, 1200)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 copyright tags for the past week</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.top_5_copyright_tags_past_week.get_absolute_url }}">Top 5 copyright tags for the past week</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="top_5_character_tags_past_week" transform="translate(400, 1200)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 character tags for the past week</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.top_5_character_tags_past_week.get_absolute_url }}">Top 5 character tags for the past week</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="top_5_species_tags_past_week" transform="translate(0, 1600)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Top 5 species tags for the past week</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.top_5_species_tags_past_week.get_absolute_url }}">Top 5 species tags for the past week</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>
             <g class="total_popularity_over_month" transform="translate(400, 1600)">
-                <text class="dash-title" text-anchor="middle" x="200", y="60">Average post popularity per month</text>
+                <text class="dash-title" text-anchor="middle" x="200", y="60">
+                    <a xlink:href="{{ front_reports.total_popularity_over_month.get_absolute_url }}">Average post popularity per month</a>
+                </text>
                 <rect class="vis-back" x="1", y="90" width="398" height="320" />
                 <g class="vis" transform="translate(0, 100) scale(0.49)" />
             </g>

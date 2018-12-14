@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load markdown %}
+
+{% block content %}
+{% for runner in runners %}
+{{ runner.help_text|markdown }}
+<h4>Reports using this runner</h4>
+<ul>
+    {% for report in runner.reports %}
+    <li><a href="{{ report.get_absolute_url }}">{{ report.title }}</a></li>
+    {% endfor %}
+</ul>
+<p>Use this runner with the name: <code>{{ runner.key }}</code></p>
+<hr />
+{% endfor %}
+{% endblock %}

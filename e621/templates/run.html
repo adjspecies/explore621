@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load markdown %}
 
 {% block content %}
 <div class="vis single">
@@ -8,6 +9,8 @@
 <dl class="report">
     <dt>Description</dt>
     <dd>{{ report.description }}</dd>
+    <dt>Runner details</dt>
+    <dd>{{ report.help_text|markdown }}</dd>
     {% if report.attributes %}
     <dt>Attributes</dt>
     <dd><code>{{ report.attributes }}</code></dd>
@@ -24,6 +27,21 @@
         {% endif %}
         {% endfor %}
     </ul></dd>
+    <dt>Constructor</dt>
+    <dd>Construct this report with the following code:
+        <pre class="codehilite">
+        Report(
+            title=<span class="s1">'{{ report.title }} copy'</span>,
+            description=<span class="s1">'{{ report.description }} (copy of report #{{ report.id }})'</span>,
+            runner=<span class="s1">'{{ report.runner }}'</span>,
+            frequency=<span class="s1">'{{ report.frequency }}'</span>,
+            attributes=<span class="s1">'{{ report.attributes }}'</span>,
+            max_stored_runs=<span class="s1">'{{ report.max_stored_runs }}'</span>,
+            requires_datum_models=<span class="s1">{{ report.requires_datum_models }}</span>,
+            unliested=<span class="s1">{{ report.unlisted }}</span>)
+        </pre>
+        <p>If you would like to see a report showing similar data to this one, you can <a href="https://github.com/adjspecies/explore621/issues" target="_blank">file an issue</a> asking for such. To expedite the process, include this constructor and what you would like changed about it (either by changing the <code>attributes='...'</code> bit yourself or simply with a few sentences).</p>
+    </dd>
 </dl>
 <script type="text/javascript" src="{% static 'js/vis.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/runners.js' %}"></script>

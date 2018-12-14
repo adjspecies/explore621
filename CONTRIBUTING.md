@@ -77,7 +77,12 @@ If you've got a report you would like to see that would be served by one of the 
 ```python
 from reports.models import Report
 
-report = Report(title='foo', description='bar', frequency='on_demand', runner='MyRunner', attributes='{"baz":"qux"}')
+report = Report(
+    title='foo',
+    description='bar',
+    frequency='on_demand',
+    runner='MyRunner',
+    attributes='{"baz":"qux"}')
 report.save()
 run = report.run()
 run.result

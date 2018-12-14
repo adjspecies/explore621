@@ -14,6 +14,7 @@ reports_api = [
 
 reports_views = [
     path('', views.dashboard),
+    path('runners/', views.list_runners),
     path('report/<int:report_id>/', views.show_report),
     path('report/<int:report_id>/run/<int:run_id>/', views.show_run),
 ]
