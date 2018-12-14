@@ -1,3 +1,4 @@
+from datetime import timedelta
 import re
 
 from django.db import models
@@ -61,12 +62,14 @@ class Report(models.Model):
 
 class Run(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
-    started = models.DateTimeField(auto_now_add=True)
-    finished = models.DateTimeField(auto_now=True)
+    started = models.DateTimeField()
+    finished = models.DateTimeField(blank=True, null=True)
     completed = models.BooleanField(default=False)
     result = models.TextField(blank=True)
 
     def duration(self):
+        if self.finished is None:
+            return timedelta(seconds=0)
         return self.finished - self.started
 
     def get_absolute_url(self):
