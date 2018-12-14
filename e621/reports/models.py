@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 
 from reports.runners import RUNNERS
@@ -39,6 +41,9 @@ class Report(models.Model):
 
     def __str__(self):
         return self.title
+
+    def help_text(self):
+        return re.sub(r'\n    ', '\n', RUNNERS[self.runner].help_text)
 
     @classmethod
     def _HACK_stats(cls):

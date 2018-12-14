@@ -2,12 +2,433 @@ window.explore621 = window.explore621 || {};
 window.explore621.vis = window.explore621.vis || (function() {
   const module = {};
 
+  const _ = d3.format(',');
+  const _f = d3.format(',.2f');
+
+
   module.set_stats = function(vis, data) {
-    vis.append('text')
-      .attr('x', 20)
-      .attr('y', 20)
-      .text('NOT IMPLEMENTED YET :( :( :(');
+    const posts = vis.append('g')
+      .classed('subvis', true);
+    const ingests = vis.append('g')
+      .classed('subvis', true)
+      .attr('transform', 'translate(400, 0)');
+    const reports = vis.append('g')
+      .classed('subvis', true)
+      .attr('transform', 'translate(400, 250)');
+    module.set_stats._posts(posts, data.posts);
+    module.set_stats._ingests(ingests, data.ingests);
+    module.set_stats._reports(reports, data.reports);
   };
+
+  module.set_stats._posts = function(vis, data) {
+    const posts_count_scale = d3.scaleLinear()
+      .domain([
+        0,
+        d3.max([
+          data.post_counts.safe,
+          data.post_counts.questionable,
+          data.post_counts.explicit])])
+      .range([0, 100]);
+    const posts_count = vis.append('g');
+    posts_count.append('text')
+      .classed('header', true)
+      .text(`Total posts: ${_(data.post_counts.total)} (${_f(data.total_file_sizes / 1024 / 1024 / 1024 / 1024)}TB)`)
+      .attr('x', 10)
+      .attr('y', 15);
+    posts_count.append('text')
+      .text('safe')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 36);
+    posts_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 25)
+      .attr('fill', '#8b8')
+      .attr('height', 15)
+      .attr('width', posts_count_scale(data.post_counts.safe))
+    posts_count.append('text')
+      .text(_(data.post_counts.safe))
+      .classed('datum-text', true)
+      .attr('x', 110 + posts_count_scale(data.post_counts.safe))
+      .attr('y', 36);
+    posts_count.append('text')
+      .text('questionable')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 56);
+    posts_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 45)
+      .attr('fill', '#bb8')
+      .attr('height', 15)
+      .attr('width', posts_count_scale(data.post_counts.questionable))
+    posts_count.append('text')
+      .text(_(data.post_counts.questionable))
+      .classed('datum-text', true)
+      .attr('x', 110 + posts_count_scale(data.post_counts.questionable))
+      .attr('y', 56);
+    posts_count.append('text')
+      .text('explicit')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 76);
+    posts_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 65)
+      .attr('fill', '#b88')
+      .attr('height', 15)
+      .attr('width', posts_count_scale(data.post_counts.explicit))
+    posts_count.append('text')
+      .text(_(data.post_counts.explicit))
+      .classed('datum-text', true)
+      .attr('x', 110 + posts_count_scale(data.post_counts.explicit))
+      .attr('y', 76);
+    posts_count.append('line')
+      .attr('x1', 105)
+      .attr('x2', 105)
+      .attr('y1', 25)
+      .attr('y2', 80);
+
+    const tags_count = vis.append('g')
+      .attr('transform', 'translate(0, 110)');
+    const tags_count_scale = d3.scaleLinear()
+      .domain([
+        0,
+        d3.max([
+          data.tag_counts.general,
+          data.tag_counts.artist,
+          data.tag_counts.copyright,
+          data.tag_counts.character,
+          data.tag_counts.species])])
+      .range([0, 100]);
+    tags_count.append('text')
+      .classed('header', true)
+      .text(`Total tags: ${_(data.tag_counts.total)}`)
+      .attr('x', 10)
+      .attr('y', 15);
+    tags_count.append('text')
+      .text('general')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 36);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 25)
+      .attr('fill', '#b88')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.general))
+      .attr('title', _(data.tag_counts.general));
+    tags_count.append('text')
+      .text(_(data.tag_counts.general))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.general))
+      .attr('y', 36);
+    tags_count.append('text')
+      .text('artist')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 56);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 45)
+      .attr('fill', '#8b8')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.artist))
+      .attr('title', _(data.tag_counts.artist));
+    tags_count.append('text')
+      .text(_(data.tag_counts.artist))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.artist))
+      .attr('y', 56);
+    tags_count.append('text')
+      .text('copyright')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 76);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 65)
+      .attr('fill', '#88b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.copyright))
+      .attr('title', _(data.tag_counts.copyright));
+    tags_count.append('text')
+      .text(_(data.tag_counts.copyright))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.copyright))
+      .attr('y', 76);
+    tags_count.append('text')
+      .text('character')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 96);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 85)
+      .attr('fill', '#bb8')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.character))
+      .attr('title', _(data.tag_counts.character));
+    tags_count.append('text')
+      .text(_(data.tag_counts.character))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.character))
+      .attr('y', 96);
+    tags_count.append('text')
+      .text('species')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 116);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 105)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.species))
+      .attr('title', _(data.tag_counts.species));
+    tags_count.append('text')
+      .text(_(data.tag_counts.species))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.species))
+      .attr('y', 116);
+    tags_count.append('line')
+      .attr('x1', 105)
+      .attr('x2', 105)
+      .attr('y1', 25)
+      .attr('y2', 105);
+
+    const relations = vis.append('g')
+      .attr('transform', 'translate(0, 250)');
+    relations.append('text')
+      .text('Relations')
+      .classed('header', true)
+      .attr('x', 10)
+      .attr('y', 15);
+    relations.append('text')
+      .text('Total tags on all posts:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 35);
+    relations.append('text')
+      .text(_(data.post_tags_count))
+      .attr('x', 165)
+      .attr('y', 35);
+    relations.append('text')
+      .text('Max tags per post:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 55);
+    relations.append('text')
+      .text(_(data.max_tags_per_post))
+      .attr('x', 165)
+      .attr('y', 55);
+    relations.append('text')
+      .text('Avg tags per post:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 75);
+    relations.append('text')
+      .text(_f(data.avg_tags_per_post))
+      .attr('x', 165)
+      .attr('y', 75);
+    relations.append('text')
+      .text('Post artists:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 95);
+    relations.append('text')
+      .text(`${_(data.artist_count)} (used ${_(data.post_artists_count)} times)`)
+      .attr('x', 165)
+      .attr('y', 95);
+    relations.append('text')
+      .text('Post sources:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 115);
+    relations.append('text')
+      .text(`${_(data.source_count)} (used ${_(data.post_sources_count)} times)`)
+      .attr('x', 165)
+      .attr('y', 115);
+  };
+
+  module.set_stats._ingests = function(vis, data) {
+    const sparkline = d3.line()
+      .x((d, i) => i * 5 + 155)
+      .y(d => d);
+    const scaled = {};
+    ['duration', 'processed', 'new', 'updated',
+      'fixed_tags_count', 'deleted_tags_count',
+      'sources_deleted', 'artists_deleted'].forEach((d, i) => {
+        let curr = data.last_10.map(dd => dd[d]).reverse();
+        let scale = d3.scaleLinear()
+          .domain([d3.min(curr), d3.max(curr)])
+          .range([15, 0]);
+        curr = curr.map(dd => scale(dd) + (20 * i) + 21);
+        scaled[d] = curr;
+    });
+    
+    vis.append('text')
+      .text(`Total ingests: ${_(data.ingest_count)}`)
+      .classed('header', true)
+      .attr('x', 10)
+      .attr('y', 15);
+
+    vis.append('text')
+      .text('Ingest duration')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 35);
+    vis.append('text')
+      .text(`${_f(data.ingest_avg_duration)}s (avg)`)
+      .attr('x', 205)
+      .attr('y', 35)
+    vis.append('path')
+      .datum(scaled.duration)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Posts processed')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 55);
+    vis.append('text')
+      .text(`${_f(data.avg_processed)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 55)
+    vis.append('path')
+      .datum(scaled.processed)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('New posts')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 75);
+    vis.append('text')
+      .text(`${_f(data.avg_new)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 75)
+    vis.append('path')
+      .datum(scaled['new'])
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Updated posts')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 95);
+    vis.append('text')
+      .text(`${_f(data.avg_updated)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 95)
+    vis.append('path')
+      .datum(scaled.updated)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Fixed tags')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 115);
+    vis.append('text')
+      .text(`${_f(data.avg_fixed_tags_count)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 115)
+    vis.append('path')
+      .datum(scaled.fixed_tags_count)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Deleted tags')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 135);
+    vis.append('text')
+      .text(`${_f(data.avg_deleted_tags_count)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 135)
+    vis.append('path')
+      .datum(scaled.deleted_tags_count)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Deleted sources')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 155);
+    vis.append('text')
+      .text(`${_f(data.avg_sources_deleted)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 155)
+    vis.append('path')
+      .datum(scaled.sources_deleted)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+
+    vis.append('text')
+      .text('Deleted artists')
+      .attr('text-anchor', 'end')
+      .attr('x', 150)
+      .attr('y', 175);
+    vis.append('text')
+      .text(`${_f(data.avg_artists_deleted)} (avg)`)
+      .attr('x', 205)
+      .attr('y', 175)
+    vis.append('path')
+      .datum(scaled.artists_deleted)
+      .style('fill', 'none')
+      .attr('class', 'data')
+      .attr('d', sparkline);
+  };
+
+  module.set_stats._reports = function(vis, data) {
+    vis.append('text')
+      .classed('header', true)
+      .text(`Total reports: ${_(data.report_count)}`)
+      .attr('x', 10)
+      .attr('y', 15);
+    vis.append('text')
+      .text('Runs:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 36);
+    vis.append('text')
+      .text(_(data.run_count))
+      .attr('x', 165)
+      .attr('y', 36);
+    vis.append('text')
+      .text('Average run duration:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 56)
+    vis.append('text')
+      .text(_f(data.run_avg_duration))
+      .attr('x', 165)
+      .attr('y', 56);
+    vis.append('text')
+      .text('Datum models:')
+      .attr('text-anchor', 'end')
+      .attr('x', 160)
+      .attr('y', 76);
+    vis.append('text')
+      .text(_(data.datum_count))
+      .attr('x', 165)
+      .attr('y', 76);
+  };
+
 
   module.relative_popularity = function(vis, data, dateFn) {
     const score = data.map(d => {

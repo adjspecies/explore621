@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import (
     get_object_or_404,
     redirect,
@@ -9,6 +11,7 @@ from reports.models import (
     Report,
     Run,
 )
+from reports.runners import RUNNERS
 
 
 def dashboard(request):
@@ -48,4 +51,15 @@ def show_run(request, report_id, run_id):
         'report': report,
         'reports': Report.objects.filter(unlisted=False),
         'run': run,
+    })
+
+def list_runners(request):
+    dedent = re.compile(r'\n    ')
+    return render(request, 'runners.html', {
+        'title': 'Report runners',
+        'runners': [{
+            'key': k,
+            'help_text': dedent.sub('\n', v.help_text),
+            'reports': Report.objects.filter(runner=k),
+        } for k, v in RUNNERS.items()],
     })
