@@ -13,6 +13,16 @@ class Tag(models.Model):
         (3, 'copyright'),
         (4, 'character'),
         (5, 'species'),
+        (10, 'anatomy'),
+        (11, 'gender'),
+        (12, 'act'),
+        (13, 'interest'),
+        (14, 'objects'),
+        (15, 'media'),
+        (16, 'location'),
+        (17, 'theme'),
+        (18, 'subject attributes'),
+        (19, 'image attributes'),
     )
     tag = models.TextField(unique=True)
     tag_type = models.IntegerField(choices=TYPE_CHOICES, default=-1)
@@ -122,7 +132,17 @@ def posts_stats():
             'copyright': Tag.objects.filter(tag_type=3).count(),
             'character': Tag.objects.filter(tag_type=4).count(),
             'species': Tag.objects.filter(tag_type=5).count(),
-            'uncategorized': Tag.objects.filter(tag_type=-1).count(),
+            'anatomy': Tag.objects.filter(tag_type=10).count(),
+            'gender': Tag.objects.filter(tag_type=11).count(),
+            'act': Tag.objects.filter(tag_type=12).count(),
+            'interest': Tag.objects.filter(tag_type=13).count(),
+            'objects': Tag.objects.filter(tag_type=14).count(),
+            'media': Tag.objects.filter(tag_type=15).count(),
+            'location': Tag.objects.filter(tag_type=16).count(),
+            'theme': Tag.objects.filter(tag_type=17).count(),
+            'subject': Tag.objects.filter(tag_type=18).count(),
+            'image': Tag.objects.filter(tag_type=19).count(),
+            
         },
         'max_tags_per_post': Post.objects\
             .annotate(count=models.Count('tags'))\

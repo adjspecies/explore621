@@ -14,7 +14,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('transform', 'translate(400, 0)');
     const reports = vis.append('g')
       .classed('subvis', true)
-      .attr('transform', 'translate(400, 250)');
+      .attr('transform', 'translate(400, 200)');
     module.set_stats._posts(posts, data.posts);
     module.set_stats._ingests(ingests, data.ingests);
     module.set_stats._reports(reports, data.reports);
@@ -99,7 +99,17 @@ window.explore621.vis = window.explore621.vis || (function() {
           data.tag_counts.artist,
           data.tag_counts.copyright,
           data.tag_counts.character,
-          data.tag_counts.species])])
+          data.tag_counts.species,
+          data.tag_counts.anatomy,
+          data.tag_counts.gender,
+          data.tag_counts.act,
+          data.tag_counts.interest,
+          data.tag_counts.objects,
+          data.tag_counts.media,
+          data.tag_counts.location,
+          data.tag_counts.theme,
+          data.tag_counts.subject,
+          data.tag_counts.image])])
       .range([0, 100]);
     tags_count.append('text')
       .classed('header', true)
@@ -191,14 +201,184 @@ window.explore621.vis = window.explore621.vis || (function() {
       .classed('datum-text', true)
       .attr('x', 110 + tags_count_scale(data.tag_counts.species))
       .attr('y', 116);
+    tags_count.append('text')
+      .text('anatomy')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 136);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 125)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.anatomy))
+      .attr('title', _(data.tag_counts.anatomy));
+    tags_count.append('text')
+      .text(_(data.tag_counts.anatomy))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.anatomy))
+      .attr('y', 136);
+    tags_count.append('text')
+      .text('gender')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 156);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 145)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.gender))
+      .attr('title', _(data.tag_counts.gender));
+    tags_count.append('text')
+      .text(_(data.tag_counts.gender))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.gender))
+      .attr('y', 156);
+    tags_count.append('text')
+      .text('act')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 176);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 165)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.act))
+      .attr('title', _(data.tag_counts.act));
+    tags_count.append('text')
+      .text(_(data.tag_counts.act))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.act))
+      .attr('y', 176);
+    tags_count.append('text')
+      .text('interest')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 196);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 185)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.interest))
+      .attr('title', _(data.tag_counts.interest));
+    tags_count.append('text')
+      .text(_(data.tag_counts.interest))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.interest))
+      .attr('y', 196);
+    tags_count.append('text')
+      .text('objects')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 216);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 205)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.objects))
+      .attr('title', _(data.tag_counts.objects));
+    tags_count.append('text')
+      .text(_(data.tag_counts.objects))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.objects))
+      .attr('y', 216);
+    tags_count.append('text')
+      .text('media')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 236);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 225)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.media))
+      .attr('title', _(data.tag_counts.media));
+    tags_count.append('text')
+      .text(_(data.tag_counts.media))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.media))
+      .attr('y', 236);
+    tags_count.append('text')
+      .text('location')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 256);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 245)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.location))
+      .attr('title', _(data.tag_counts.location));
+    tags_count.append('text')
+      .text(_(data.tag_counts.location))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.location))
+      .attr('y', 256);
+    tags_count.append('text')
+      .text('theme')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 276);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 265)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.theme))
+      .attr('title', _(data.tag_counts.theme));
+    tags_count.append('text')
+      .text(_(data.tag_counts.theme))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.theme))
+      .attr('y', 276);
+    tags_count.append('text')
+      .text('subject attrs.')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 296);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 285)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.subject))
+      .attr('title', _(data.tag_counts.subject));
+    tags_count.append('text')
+      .text(_(data.tag_counts.subject))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.subject))
+      .attr('y', 296);
+    tags_count.append('text')
+      .text('image attrs.')
+      .attr('text-anchor', 'end')
+      .attr('x', 100)
+      .attr('y', 316);
+    tags_count.append('rect')
+      .attr('x', 105)
+      .attr('y', 305)
+      .attr('fill', '#b8b')
+      .attr('height', 15)
+      .attr('width', tags_count_scale(data.tag_counts.image))
+      .attr('title', _(data.tag_counts.image));
+    tags_count.append('text')
+      .text(_(data.tag_counts.image))
+      .classed('datum-text', true)
+      .attr('x', 110 + tags_count_scale(data.tag_counts.image))
+      .attr('y', 316);
     tags_count.append('line')
       .attr('x1', 105)
       .attr('x2', 105)
       .attr('y1', 25)
-      .attr('y2', 105);
+      .attr('y2', 325);
 
     const relations = vis.append('g')
-      .attr('transform', 'translate(0, 250)');
+      .attr('transform', 'translate(400, 300)');
     relations.append('text')
       .text('Relations')
       .classed('header', true)
