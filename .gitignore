@@ -1,4 +1,5 @@
 venv
 *.py[co]
+*.sw[po]
 *.sqlite3
 __pycache__
