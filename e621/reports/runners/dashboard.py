@@ -227,8 +227,9 @@ class TopXTagsPastYDaysByType(BaseRunner):
     Attributes:
     
     * `tag_type` - the type of tag. Can be 'general', 'artist', 'copyright',
-        'species', 'character', 'anatomy', 'act', or 'interest' (NB: the last
-        three are specific to explore621, and not used on e621).
+        'species', 'character', 'anatomy', 'act', 'interest', 'objects',
+        'media', 'location', 'theme', 'subject attributes', or 'image
+        attributes'.
     * `count` - the number of tags per day to request.
     * `count_offset` - the number of tags to skip before starting to collect
         (default: 0)
