@@ -118,7 +118,7 @@ main .reports ul li {
 
 main .content {
     flex-basis: 75%;
-    overflow: scroll;
+    overflow-x: scroll;
 }
 
 main .content .vis {

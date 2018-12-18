@@ -12,7 +12,7 @@
 <a href="/admin/reports/report/{{ report.id }}/delete/">Delete</a></p>{% endif %}
 <dl class="report">
     <dt>Description</dt>
-    <dd>{{ report.description }}</dd>
+    <dd>{{ report.description|markdown }}</dd>
     <dt>Runner details</dt>
     <dd>{{ report.help_text|markdown }}</dd>
     {% if report.attributes %}
