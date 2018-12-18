@@ -38,6 +38,8 @@ Post.objects\
     .order_by('-tags__tag_type', '-c')
 ```
 
+Also, this is a *very* weak box. Maybe we'll update it, but we're not too worried about that now.
+
 ## I uploaded something new to e621, how come I'm not seeing the total posts on explore621 go up?
 
 explore621 fetches new data from e621 once a day to keep from overwhelming their servers. Your post, its tags, favorites, score, and so on will show up in our system tomorrow!

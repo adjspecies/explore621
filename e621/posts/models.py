@@ -30,6 +30,7 @@ class Tag(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['tag']),
+            models.Index(fields=['tag_type']),
         ]
 
 
