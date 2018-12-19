@@ -6,7 +6,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   const _f = d3.format(',.2f');
 
 
-  module.set_stats = function(vis, data) {
+  module.set_stats = function(vis, data, attributes) {
     const posts = vis.append('g')
       .classed('subvis', true);
     const ingests = vis.append('g')
@@ -20,7 +20,7 @@ window.explore621.vis = window.explore621.vis || (function() {
     module.set_stats._reports(reports, data.reports);
   };
 
-  module.set_stats._posts = function(vis, data) {
+  module.set_stats._posts = function(vis, data, attributes) {
     const posts_count_scale = d3.scaleLinear()
       .domain([
         0,
@@ -431,7 +431,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('y', 115);
   };
 
-  module.set_stats._ingests = function(vis, data) {
+  module.set_stats._ingests = function(vis, data, attributes) {
     const sparkline = d3.line()
       .x((d, i) => i * 5 + 155)
       .y(d => d);
@@ -574,7 +574,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('d', sparkline);
   };
 
-  module.set_stats._reports = function(vis, data) {
+  module.set_stats._reports = function(vis, data, attributes) {
     vis.append('text')
       .classed('header', true)
       .text(`Total reports: ${_(data.report_count)}`)
@@ -610,7 +610,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.relative_popularity = function(vis, data, dateFn) {
+  module.relative_popularity = function(vis, data, attributes, dateFn) {
     const score = data.map(d => {
       return {key: d.key, value: d.value
         .filter(dd => dd.key === 'score')[0].value};
@@ -754,7 +754,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.popularity = function(vis, data, dateFn) {
+  module.popularity = function(vis, data, attributes, dateFn) {
     const score = data.map(d => {
       return {key: d.key, value: d.value[0].value};
     });
@@ -814,7 +814,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.tags_over_time = function(vis, data, dateFn) {
+  module.tags_over_time = function(vis, data, attributes, dateFn) {
     const width = 800;
     const height = 600;
 
@@ -860,7 +860,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.stacked_tags = function(vis, data) {
+  module.stacked_tags = function(vis, data, attributes) {
     const width = 800;
     const height = 600;
 
@@ -940,7 +940,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.simple_line = function(vis, data, dateFn) {
+  module.simple_line = function(vis, data, attributes, dateFn) {
     const width = 800;
     const height = 600;
 
