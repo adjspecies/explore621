@@ -52,6 +52,6 @@ Report(
 <script type="text/javascript" src="{% static 'js/vis.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/runners.js' %}"></script>
 <script type="text/javascript">
-    window.explore621.runners.{{ report.runner }}({{ run.result|safe }});
+    window.explore621.runners.{{ report.runner }}({{ run.result|safe }}, {{ report.attributes|default:"{}"|safe }});
 </script>
 {% endblock %}

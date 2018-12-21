@@ -82,37 +82,47 @@
 <script type="text/javascript">
 window.explore621.vis.set_stats(
     d3.select('.data_set_stats .vis').append('g'),
-    {{ front_reports.data_set_stats.last_run.result|safe }});
+    {{ front_reports.data_set_stats.last_run.result|safe }},
+    {{ front_reports.data_set_stats.attributes|default:"{}"|safe }});
 window.explore621.vis.simple_line(
     d3.select('.total_posts_over_day .vis').append('g'),
     {{ front_reports.total_posts_over_day.last_run.result|safe }},
+    {{ front_reports.total_posts_over_day.attributes|default:"{}"|safe }},
     d => d);
 window.explore621.vis.simple_line(
     d3.select('.uploads_over_day .vis').append('g'),
     {{ front_reports.uploads_over_day.last_run.result|safe }},
+    {{ front_reports.uploads_over_day.attributes|default:"{}"|safe }},
     d => d);
 window.explore621.vis.simple_line(
     d3.select('.uploads_over_hour_past_week .vis').append('g'),
     {{ front_reports.uploads_over_hour_past_week.last_run.result|safe }},
+    {{ front_reports.uploads_over_hour_past_week.attributes|default:"{}"|safe }},
     d => `${d}:00`);
 window.explore621.vis.stacked_tags(
     d3.select('.top_10_tags_past_week .vis').append('g'),
-    {{ front_reports.top_10_tags_past_week.last_run.result|safe }});
+    {{ front_reports.top_10_tags_past_week.last_run.result|safe }},
+    {{ front_reports.top_10_tags_past_week.attributes|default:"{}"|safe }});
 window.explore621.vis.stacked_tags(
     d3.select('.top_5_general_tags_past_week .vis').append('g'),
-    {{ front_reports.top_5_general_tags_past_week.last_run.result|safe }});
+    {{ front_reports.top_5_general_tags_past_week.last_run.result|safe }},
+    {{ front_reports.top_5_general_tags_past_week.attributes|default:"{}"|safe }});
 window.explore621.vis.stacked_tags(
     d3.select('.top_5_copyright_tags_past_week .vis').append('g'),
-    {{ front_reports.top_5_copyright_tags_past_week.last_run.result|safe }});
+    {{ front_reports.top_5_copyright_tags_past_week.last_run.result|safe }},
+    {{ front_reports.top_5_copyright_tags_past_week.attributes|default:"{}"|safe }});
 window.explore621.vis.stacked_tags(
     d3.select('.top_5_character_tags_past_week .vis').append('g'),
-    {{ front_reports.top_5_character_tags_past_week.last_run.result|safe }});
+    {{ front_reports.top_5_character_tags_past_week.last_run.result|safe }},
+    {{ front_reports.top_5_character_tags_past_week.attributes|default:"{}"|safe }});
 window.explore621.vis.stacked_tags(
     d3.select('.top_5_species_tags_past_week .vis').append('g'),
-    {{ front_reports.top_5_species_tags_past_week.last_run.result|safe }});
+    {{ front_reports.top_5_species_tags_past_week.last_run.result|safe }},
+    {{ front_reports.top_5_species_tags_past_week.attributes|default:"{}"|safe }});
 window.explore621.vis.popularity(
     d3.select('.total_popularity_over_month .vis').append('g'),
     {{ front_reports.total_popularity_over_month.last_run.result|safe }},
+    {{ front_reports.total_popularity_over_month.attributes|default:"{}"|safe }},
     d => `${d}-01`);
 </script>
 <section class="injest-log">
