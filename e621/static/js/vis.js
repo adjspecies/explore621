@@ -6,7 +6,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   const _f = d3.format(',.2f');
 
 
-  module.set_stats = function(vis, data, attributes) {
+  module.set_stats = (vis, data, attributes) => {
     const posts = vis.append('g')
       .classed('subvis', true);
     const ingests = vis.append('g')
@@ -20,7 +20,7 @@ window.explore621.vis = window.explore621.vis || (function() {
     module.set_stats._reports(reports, data.reports);
   };
 
-  module.set_stats._posts = function(vis, data, attributes) {
+  module.set_stats._posts = (vis, data, attributes) => {
     const posts_count_scale = d3.scaleLinear()
       .domain([
         0,
@@ -431,7 +431,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('y', 115);
   };
 
-  module.set_stats._ingests = function(vis, data, attributes) {
+  module.set_stats._ingests = (vis, data, attributes) => {
     const sparkline = d3.line()
       .x((d, i) => i * 5 + 155)
       .y(d => d);
@@ -574,7 +574,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('d', sparkline);
   };
 
-  module.set_stats._reports = function(vis, data, attributes) {
+  module.set_stats._reports = (vis, data, attributes) => {
     vis.append('text')
       .classed('header', true)
       .text(`Total reports: ${_(data.report_count)}`)
@@ -610,7 +610,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.relative_popularity = function(vis, data, attributes, dateFn) {
+  module.relative_popularity = (vis, data, attributes, dateFn) => {
     const score = data.map(d => {
       return {key: d.key, value: d.value
         .filter(dd => dd.key === 'score')[0].value};
@@ -642,9 +642,9 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     const yScale = d3.scaleLinear()
       .domain([
-        d3.max(([].concat(score, fav_count)).map((d) => d.value)
+        d3.max(([].concat(score, fav_count)).map(d => d.value)
           .concat([].concat(score_sd, fav_count_sd).map(d => d.value / 2))),
-        d3.min(([].concat(score, fav_count)).map((d) => d.value)
+        d3.min(([].concat(score, fav_count)).map(d => d.value)
           .concat([].concat(score_sd, fav_count_sd).map(d => -d.value / 2)))])
       .range([0, height - 50]);
     const xScale = d3.scaleTime()
@@ -664,8 +664,8 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     const line = d3.line()
       .curve(d3.curveMonotoneX)
-      .x((d) => xScale(Date.parse(dateFn(d.key))))
-      .y((d) => yScale(d.value));
+      .x(d => xScale(Date.parse(dateFn(d.key))))
+      .y(d => yScale(d.value));
     const sd_area = d3.area()
       .curve(d3.curveMonotoneX)
       .x(d => xScale(Date.parse(dateFn(d.key))))
@@ -754,7 +754,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.popularity = function(vis, data, attributes, dateFn) {
+  module.popularity = (vis, data, attributes, dateFn) => {
     const score = data.map(d => {
       return {key: d.key, value: d.value[0].value};
     });
@@ -766,7 +766,7 @@ window.explore621.vis = window.explore621.vis || (function() {
     const height = 600;
 
     const yScale = d3.scaleLinear()
-      .domain([d3.max((score.concat(fav_count)).map((d) => d.value)), 0])
+      .domain([d3.max((score.concat(fav_count)).map(d => d.value)), 0])
       .range([0, height - 20]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].key)), Date.parse(dateFn(data[data.length - 1].key))])
@@ -785,8 +785,8 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     const line = d3.line()
       .curve(d3.curveMonotoneX)
-      .x((d) => xScale(Date.parse(dateFn(d.key))))
-      .y((d) => yScale(d.value));
+      .x(d => xScale(Date.parse(dateFn(d.key))))
+      .y(d => yScale(d.value));
     vis.append('path')
       .datum(score)
       .style('fill', 'none')
@@ -814,12 +814,12 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.tags_over_time = function(vis, data, attributes, dateFn) {
+  module.tags_over_time = (vis, data, attributes, dateFn) => {
     const width = 800;
     const height = 600;
 
     const yScale = d3.scaleLinear()
-      .domain([d3.max(data.map((d) => d.value.map(dd => dd.value)).reduce((m, d) => m.concat(d))), 0])
+      .domain([d3.max(data.map(d => d.value.map(dd => dd.value)).reduce((m, d) => m.concat(d))), 0])
       .range([20, height - 20]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].value[0].key)), Date.parse(dateFn(data[0].value[data[0].value.length - 1].key))])
@@ -841,8 +841,8 @@ window.explore621.vis = window.explore621.vis || (function() {
     data.forEach(datum => {
       const line = d3.line()
         .curve(d3.curveMonotoneX)
-        .x((d) => xScale(Date.parse(dateFn(d.key))))
-        .y((d) => yScale(d.value));
+        .x(d => xScale(Date.parse(dateFn(d.key))))
+        .y(d => yScale(d.value));
       vis.append('path')
         .datum(datum.value)
         .style('fill', 'none')
@@ -860,15 +860,15 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.stacked_tags = function(vis, data, attributes) {
+  module.stacked_tags = (vis, data, attributes) => {
     const width = 800;
     const height = 600;
 
-    const dates = data.map((d) => Date.parse(d.key));
+    const dates = data.map(d => Date.parse(d.key));
     const tags = data
-        .map((d) => Object.keys(d))
+        .map(d => Object.keys(d))
         .reduce((m, d) => m.concat(d), [])
-        .filter((d) => d !== 'key')
+        .filter(d => d !== 'key')
         .filter((d, i, self) => self.indexOf(d) === i);
     data.forEach((d, i) => {
       let sum = 0
@@ -940,7 +940,7 @@ window.explore621.vis = window.explore621.vis || (function() {
   };
 
 
-  module.simple_line = function(vis, data, attributes, dateFn) {
+  module.simple_line = (vis, data, attributes, dateFn) => {
     const width = 800;
     const height = 600;
 
@@ -964,8 +964,8 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     const line = d3.line()
       .curve(d3.curveMonotoneX)
-      .x((d) => xScale(Date.parse(dateFn(d.key))))
-      .y((d) => yScale(d.value));
+      .x(d => xScale(Date.parse(dateFn(d.key))))
+      .y(d => yScale(d.value));
     vis.append('path')
       .datum(data)
       .style('fill', 'none')

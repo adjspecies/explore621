@@ -2,7 +2,7 @@ window.explore621 = window.explore621 || {};
 window.explore621.runners = window.explore621.runners || (function() {
   const module = {};
 
-  module.RelativeTagPopularityOverDay = function(data, attributes) {
+  module.RelativeTagPopularityOverDay = (data, attributes) => {
     const id = "RelativeTagPopularityOverDay";
 
     const vis = d3.select(`.${id}`)
@@ -12,7 +12,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.RelativeTagPopularityOverMonth = function(data, attributes) {
+  module.RelativeTagPopularityOverMonth = (data, attributes) => {
     const id = "RelativeTagPopularityOverMonth";
 
     const vis = d3.select(`.${id}`)
@@ -22,7 +22,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.RelativeTagPopularityOverYear = function(data, attributes) {
+  module.RelativeTagPopularityOverYear = (data, attributes) => {
     const id = "RelativeTagPopularityOverYear";
 
     const vis = d3.select(`.${id}`)
@@ -32,7 +32,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TagPopularityOverDay = function(data, attributes) {
+  module.TagPopularityOverDay = (data, attributes) => {
     const id = "TagPopularityOverDay";
 
     const vis = d3.select(`.${id}`)
@@ -42,7 +42,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TagPopularityOverMonth = function(data, attributes) {
+  module.TagPopularityOverMonth = (data, attributes) => {
     const id = "TagPopularityOverMonth";
 
     const vis = d3.select(`.${id}`)
@@ -52,7 +52,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TagPopularityOverYear = function(data, attributes) {
+  module.TagPopularityOverYear = (data, attributes) => {
     const id = "TagPopularityOverYear";
 
     const vis = d3.select(`.${id}`)
@@ -62,7 +62,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TagsOverDay = function(data, attributes) {
+  module.TagsOverDay = (data, attributes) => {
     const id = "TagsOverDay";
 
     const vis = d3.select(`.${id}`)
@@ -72,7 +72,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TagsOverMonth = function(data, attributes) {
+  module.TagsOverMonth = (data, attributes) => {
     const id = "TagsOverMonth";
 
     const vis = d3.select(`.${id}`)
@@ -82,7 +82,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TagsOverYear = function(data, attributes) {
+  module.TagsOverYear = (data, attributes) => {
     const id = "TagsOverYear";
 
     const vis = d3.select(`.${id}`)
@@ -92,7 +92,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TopXTagsPastYDays = function(data, attributes) {
+  module.TopXTagsPastYDays = (data, attributes) => {
     const id = "TopXTagsPastYDays";
 
     const vis = d3.select(`.${id}`)
@@ -102,7 +102,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TopXTagsPastYDaysByType = function(data, attributes) {
+  module.TopXTagsPastYDaysByType = (data, attributes) => {
     const id = "TopXTagsPastYDaysByType";
 
     const vis = d3.select(`.${id}`)
@@ -112,7 +112,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TotalPopularityOverDay = function(data, attributes) {
+  module.TotalPopularityOverDay = (data, attributes) => {
     const id = "TotalPopularityOverDay";
 
     const vis = d3.select(`.${id}`)
@@ -122,7 +122,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TotalPopularityOverMonth = function(data, attributes) {
+  module.TotalPopularityOverMonth = (data, attributes) => {
     const id = "TotalPopularityOverMonth";
 
     const vis = d3.select(`.${id}`)
@@ -132,7 +132,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TotalPopularityOverYear = function(data, attributes) {
+  module.TotalPopularityOverYear = (data, attributes) => {
     const id = "TotalPopularityOverYear";
 
     const vis = d3.select(`.${id}`)
@@ -142,7 +142,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.TotalPostsOverDay = function(data, attributes) {
+  module.TotalPostsOverDay = (data, attributes) => {
     const id = "TotalPostsOverDay";
 
     const vis = d3.select(`.${id}`)
@@ -152,7 +152,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.UploadsOverDay = function(data, attributes) {
+  module.UploadsOverDay = (data, attributes) => {
     const id = "UploadsOverDay";
 
     const vis = d3.select(`.${id}`)
@@ -162,7 +162,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.UploadsOverHourPastWeek = function(data, attributes) {
+  module.UploadsOverHourPastWeek = (data, attributes) => {
     const id = "UploadsOverHourPastWeek";
 
     const vis = d3.select(`.${id}`)
@@ -172,7 +172,7 @@ window.explore621.runners = window.explore621.runners || (function() {
   };
 
 
-  module.SetStats = function(data, attributes) {
+  module.SetStats = (data, attributes) => {
     const id = "SetStats";
 
     const vis = d3.select(`.${id}`)
