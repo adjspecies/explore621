@@ -1,6 +1,21 @@
+/**
+ * Visualization runners.
+ *
+ * These methods simply map a runner the appropriate visualization. Not much
+ * work happens here, but it's worth noting that some visualizations require
+ * Date formating/parsing functions.
+ */
 window.explore621 = window.explore621 || {};
 window.explore621.runners = window.explore621.runners || (function() {
   const module = {};
+
+  const dateFns = {
+    identity: d => d,
+    addDay: d => `${d}-01`,
+    addMonthDay: d => `${d}-01-01`,
+    addMinute: d => `${d}:00`
+  };
+
 
   module.RelativeTagPopularityOverDay = (data, attributes) => {
     const id = "RelativeTagPopularityOverDay";
@@ -8,7 +23,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
     
-    window.explore621.vis.relative_popularity(vis, data, attributes, d => d);
+    window.explore621.vis.relativePopularity(vis, data, attributes, dateFns.identity);
   };
 
 
@@ -18,7 +33,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.relative_popularity(vis, data, attributes, d => `${d}-01`)
+    window.explore621.vis.relativePopularity(vis, data, attributes, dateFns.addDay);
   };
 
 
@@ -28,7 +43,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.relative_popularity(vis, data, attributes, d => `${d}-01-01`)
+    window.explore621.vis.relativePopularity(vis, data, attributes, dateFns.addMonthDay)
   };
 
 
@@ -38,7 +53,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.popularity(vis, data, attributes, d => d);
+    window.explore621.vis.popularity(vis, data, attributes, dateFns.identity);
   };
 
 
@@ -48,7 +63,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.popularity(vis, data, attributes, d => `${d}-01`);
+    window.explore621.vis.popularity(vis, data, attributes, dateFns.addDay);
   };
 
 
@@ -58,7 +73,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.popularity(vis, data, attributes, d => `${d}-01-01`);
+    window.explore621.vis.popularity(vis, data, attributes, dateFns.addMonthDay);
   };
 
 
@@ -68,7 +83,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.tags_over_time(vis, data, attributes, d => d);
+    window.explore621.vis.tagsOverTime(vis, data, attributes, dateFns.identity);
   };
 
 
@@ -78,7 +93,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.tags_over_time(vis, data, attributes, d => `${d}-01`);
+    window.explore621.vis.tagsOverTime(vis, data, attributes, dateFns.addDay);
   };
 
 
@@ -88,7 +103,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.tags_over_time(vis, data, attributes, d => `${d}-01-01`);
+    window.explore621.vis.tagsOverTime(vis, data, attributes, dateFns.addMonthDay);
   };
 
 
@@ -98,7 +113,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.stacked_tags(vis, data, attributes);
+    window.explore621.vis.stackedTags(vis, data, attributes);
   };
 
 
@@ -108,7 +123,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.stacked_tags(vis, data, attributes);
+    window.explore621.vis.stackedTags(vis, data, attributes);
   };
 
 
@@ -118,7 +133,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.popularity(vis, data, attributes, d => d);
+    window.explore621.vis.popularity(vis, data, attributes, dateFns.identity);
   };
 
 
@@ -128,7 +143,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.popularity(vis, data, attributes, d => `${d}-01`);
+    window.explore621.vis.popularity(vis, data, attributes, dateFns.addDay);
   };
 
 
@@ -138,7 +153,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.popularity(vis, data, attributes, d => `${d}-01-01`);
+    window.explore621.vis.popularity(vis, data, attributes, dateFns.addMonthDay);
   };
 
 
@@ -148,7 +163,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.simple_line(vis, data, attributes, d => d);
+    window.explore621.vis.simpleLine(vis, data, attributes, dateFns.identity);
   };
 
 
@@ -158,7 +173,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.simple_line(vis, data, attributes, d => d);
+    window.explore621.vis.simpleLine(vis, data, attributes, dateFns.identity);
   };
 
 
@@ -168,7 +183,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g');
 
-    window.explore621.vis.simple_line(vis, data, attributes, d => `${d}:00`);
+    window.explore621.vis.simpleLine(vis, data, attributes, dateFns.addMinute);
   };
 
 
@@ -178,7 +193,7 @@ window.explore621.runners = window.explore621.runners || (function() {
     const vis = d3.select(`.${id}`)
       .append('g')
 
-    window.explore621.vis.set_stats(vis, data, attributes);
+    window.explore621.vis.setStats(vis, data, attributes);
   };
 
   return module;
