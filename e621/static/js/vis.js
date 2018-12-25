@@ -595,7 +595,7 @@ window.explore621.vis = window.explore621.vis || (function() {
       .attr('x', 160)
       .attr('y', 56)
     vis.append('text')
-      .text(_f(data.run_avg_duration))
+      .text(`${_f(data.run_avg_duration)}s`)
       .attr('x', 165)
       .attr('y', 56);
     vis.append('text')
@@ -642,14 +642,13 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     const yScale = d3.scaleLinear()
       .domain([
-        d3.max(([].concat(score, fav_count)).map(d => d.value)
-          .concat([].concat(score_sd, fav_count_sd).map(d => d.value / 2))),
-        d3.min(([].concat(score, fav_count)).map(d => d.value)
-          .concat([].concat(score_sd, fav_count_sd).map(d => -d.value / 2)))])
+        d3.max(([].concat(score, fav_count, score_sd, fav_count_sd)).map(d => d.value)),
+        d3.min(([].concat(score, fav_count, score_sd, fav_count_sd)).map(d => d.value)
+          .concat([].concat(score_sd, fav_count_sd).map(d => -d.value)))])
       .range([0, height - 50]);
     const xScale = d3.scaleTime()
       .domain([Date.parse(dateFn(data[0].key)), Date.parse(dateFn(data[data.length - 1].key))])
-      .range([60, width - 100]);
+      .range([60, width]);
 
     const yAxis = d3.axisLeft(yScale);
     vis.append('g')
@@ -669,8 +668,8 @@ window.explore621.vis = window.explore621.vis || (function() {
     const sd_area = d3.area()
       .curve(d3.curveMonotoneX)
       .x(d => xScale(Date.parse(dateFn(d.key))))
-      .y0(d => yScale(d.value / 2))
-      .y1(d => yScale(-d.value / 2))
+      .y0(d => yScale(d.value))
+      .y1(d => yScale(-d.value))
 
     vis.append('path')
       .datum(score)
@@ -678,12 +677,6 @@ window.explore621.vis = window.explore621.vis || (function() {
       .style('stroke', '#1f77b4')
       .attr('class', 'data')
       .attr('d', line);
-    vis.append('text')
-      .text('score')
-      .attr('dominant-baseline', 'middle')
-      .attr('x', width - 95)
-      .attr('y', yScale(score[score.length - 1].value))
-      .style('fill', '#1f77b4');
     vis.append('path')
       .datum(score_sd)
       .style('display', () => sd_visible ? 'block' : 'none')
@@ -698,12 +691,6 @@ window.explore621.vis = window.explore621.vis || (function() {
       .style('stroke', '#ff7f0e')
       .attr('class', 'data')
       .attr('d', line);
-    vis.append('text')
-      .text('fav count')
-      .attr('dominant-baseline', 'middle')
-      .attr('x', width - 95)
-      .attr('y', yScale(fav_count[fav_count.length - 1].value))
-      .style('fill', '#ff7f0e');
     vis.append('path')
       .datum(fav_count_sd)
       .style('display', () => sd_visible ? 'block' : 'none')
@@ -714,7 +701,7 @@ window.explore621.vis = window.explore621.vis || (function() {
 
     vis.append('line')
       .attr('x1', 60)
-      .attr('x2', width - 100)
+      .attr('x2', width)
       .attr('y1', yScale(0))
       .attr('y2', yScale(0));
 
@@ -749,6 +736,97 @@ window.explore621.vis = window.explore621.vis || (function() {
             .classed('button-off', true)
             .select('text')
             .text('Show standard deviation');
+        }
+      });
+
+    const floating_legend = vis.append('g')
+      .classed('floating-legend', true)
+      .classed('visible', false);
+    const legend = floating_legend.append('g')
+      .classed('legend', true);
+    const legend_line = legend.append('line')
+      .attr('y1', 0)
+      .attr('y2', height - 50)
+      .attr('x1', 0)
+      .attr('x2', 0);
+    const date = legend.append('text')
+      .attr('x', 3)
+      .attr('y', 15);
+    const legend_score = legend.append('g')
+      .classed('legend-item', true);
+    const legend_score_rect = legend_score.append('rect')
+      .attr('x', 0)
+      .attr('y', -15)
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('height', 22);
+    const legend_score_text = legend_score.append('text')
+      .text('score')
+      .attr('x', 5)
+      .attr('y', 0)
+      .style('fill', '#1f77b4');
+    const legend_fav_count = legend.append('g')
+      .classed('legend-item', true);
+    const legend_fav_count_rect = legend_fav_count.append('rect')
+      .attr('x', 0)
+      .attr('y', -15)
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('height', 22);
+    const legend_fav_count_text = legend_fav_count.append('text')
+      .text("fav count")
+      .attr('x', 5)
+      .attr('y', 0)
+      .style('stroke', '#ff7f0e');
+    floating_legend.append('g')
+      .classed('overlay', true)
+      .selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('y', 0)
+      .attr('x', d => xScale(Date.parse(dateFn(d.key))))
+      .attr('width', (width - 60) / data.length)
+      .attr('height', height - 50)
+      .on('mouseenter', () => floating_legend.classed('visible', true))
+      .on('mouseleave', () => floating_legend.classed('visible', false))
+      .on('mousemove', function(d) {
+        const el = d3.select(this);
+        const curr_x = parseInt(el.attr('x'));
+        const curr_score = d.value.filter(dd => dd.key == 'score')[0].value;
+        const curr_fav_count = d.value.filter(dd => dd.key == 'fav_count')[0].value;
+        legend.attr('transform', `translate(${curr_x}, 0)`);
+        if (sd_visible) {
+          const curr_score_sd = d.value.filter(dd => dd.key == 'total_score_sd')[0].value;
+          const curr_fav_count_sd = d.value.filter(dd => dd.key == 'total_fav_count_sd')[0].value;
+          legend_score_text.text(`rel. score: ${_f(curr_score)} (${_f(Math.abs(curr_score / curr_score_sd))})`);
+          legend_fav_count_text.text(`rel. fav count: ${_f(curr_fav_count)} (${_f(Math.abs(curr_fav_count / curr_fav_count_sd))})`);
+        } else {
+          legend_score_text.text(`rel. score: ${_f(curr_score)}`);
+          legend_fav_count_text.text(`rel. fav count: ${_f(curr_fav_count)}`);
+        }
+        const curr_score_width = legend_score_text.node().getBBox().width;
+        const curr_score_x_offset = curr_score_width + curr_x + 60 > width ?
+          -curr_score_width - 14 : 4;
+        const curr_fav_count_width = legend_fav_count_text.node().getBBox().width;
+        const curr_fav_count_x_offset = curr_fav_count_width + curr_x + 60 > width ?
+          -curr_fav_count_width - 14 : 4;
+        legend_score_rect.attr('width', curr_score_width + 10);
+        legend_fav_count_rect.attr('width', curr_fav_count_width + 10);
+        let curr_score_y_offset = yScale(curr_score) + 17;
+        let curr_fav_count_y_offset = yScale(curr_fav_count) - 8;
+        if (curr_score >= curr_fav_count) {
+          curr_score_y_offset = yScale(curr_score) - 9;
+          curr_fav_count_y_offset = yScale(curr_fav_count) + 17;
+        }
+        legend_score.attr('transform', `translate(${curr_score_x_offset}, ${curr_score_y_offset})`);
+        legend_fav_count.attr('transform', `translate(${curr_fav_count_x_offset}, ${curr_fav_count_y_offset})`);
+        date.text(d.key);
+        const curr_date_width = date.node().getBBox().width;
+        if (curr_date_width + curr_x + 60 > width) {
+          date.attr('x', -curr_date_width - 3);
+        } else {
+          date.attr('x', 3);
         }
       });
   };
