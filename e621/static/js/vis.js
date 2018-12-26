@@ -770,7 +770,7 @@ window.explore621.vis = window.explore621.vis || (() => {
     const xAxis = d3.axisBottom(xScale);
     vis.append('g')
       .attr('class', 'axis')
-      .attr('transform', `translate(50, ${height - 50})`)
+      .attr('transform', `translate(0, ${height - 50})`)
       .call(xAxis);
 
     // Line generator for score/fav count.
@@ -828,17 +828,16 @@ window.explore621.vis = window.explore621.vis || (() => {
       .classed('sd-button', true)
       .classed('button-off', true);
     button.append('rect')
-      .attr('x', width / 2 - 97)
-      .attr('y', height - 22)
+      .attr('x', 100)
+      .attr('y', height - 23)
       .attr('rx', 2)
       .attr('ry', 2)
       .attr('width', 194)
       .attr('height', 22);
     button.append('text')
       .text('show standard deviation')
-      .attr('text-anchor', 'middle')
-      .attr('x', width / 2)
-      .attr('y', height - 5)
+      .attr('x', 108)
+      .attr('y', height - 6)
       .on('click', () => {
         // Toggle standard deviation visibility.
         sdVisible = !sdVisible;
@@ -858,6 +857,42 @@ window.explore621.vis = window.explore621.vis || (() => {
             .text('Show standard deviation');
         }
       });
+
+    // Static legend for line colors.
+    const bottomLegend = vis.append('g')
+      .classed('static-legend', true)
+      .attr('transform', `translate(350, ${height - 22})`);
+    bottomLegend.append('line')
+      .attr('x1', 0)
+      .attr('y1', 11)
+      .attr('x2', 10)
+      .attr('y2', 11)
+      .style('stroke', '#1f77b4');
+    bottomLegend.append('text')
+      .attr('x', 15)
+      .attr('y', 15)
+      .style('fill', '#1f77b4')
+      .text('score relative to mean');
+    bottomLegend.append('line')
+      .attr('x1', 160)
+      .attr('y1', 11)
+      .attr('x2', 170)
+      .attr('y2', 11)
+      .style('stroke', '#ff7f0e');
+    bottomLegend.append('text')
+      .attr('x', 175)
+      .attr('y', 15)
+      .style('fill', '#ff7f0e')
+      .text('fav count relative to mean');
+    bottomLegend.append('line')
+      .attr('x1', 345)
+      .attr('y1', 11)
+      .attr('x2', 355)
+      .attr('y2', 11);
+    bottomLegend.append('text')
+      .attr('x', 360)
+      .attr('y', 15)
+      .text('mean')
 
     /*** Create a floating legend that follows the mouse over time. ***/
     // Container for legend and overlay.
