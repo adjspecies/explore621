@@ -23,6 +23,7 @@ class Tag(models.Model):
         (17, 'theme'),
         (18, 'subject attributes'),
         (19, 'image attributes'),
+        (20, 'year'),
     )
     tag = models.TextField(unique=True)
     tag_type = models.IntegerField(choices=TYPE_CHOICES, default=-1)

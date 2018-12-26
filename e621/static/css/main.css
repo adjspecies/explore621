@@ -195,6 +195,28 @@ footer {
     fill: #aad;
 }
 
+.vis .floating-legend .legend {
+    display: none;
+}
+
+.vis .floating-legend.visible .legend {
+    display: block;
+}
+
+.vis .floating-legend.visible .legend-item rect {
+    fill: rgb(0, 33, 88);
+    stroke: rgb(0, 23 68);
+}
+
+.vis .floating-legend .overlay rect {
+    stroke-width: 0px;
+    fill: rgba(0, 0, 0, 0.0);
+}
+
+.vis .static-legend text {
+    font-size: 10pt;
+}
+
 .subvis text {
     font-size: 11pt;
 }
