@@ -12,23 +12,27 @@ from .runners import RUNNERS
 
 help_text_re = re.compile(r'\n    ')
 def _success(obj):
-    return HttpResponse(json.dumps({
+    response = HttpResponse(json.dumps({
         'status': 'success',
         'message': 'ok',
         'result': obj,
     }), content_type='application/json')
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 def _error(message, obj=None, status=400):
-    response = {
+    responseObj = {
         'status': 'error',
         'message': message,
     }
     if obj is not None:
-        response['result'] = obj
-    return HttpResponse(
-        json.dumps(response),
+        responseObj['result'] = obj
+    response = HttpResponse(
+        json.dumps(responseObj),
         content_type='application/json',
         status=status)
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 def list_reports(request):
     response = []
